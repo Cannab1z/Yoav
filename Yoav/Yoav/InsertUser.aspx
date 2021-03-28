@@ -1,5 +1,13 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="Yoav.Register" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="InsertUser.aspx.cs" Inherits="InsertUser" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body dir="rtl">
+    <form id="form1" runat="server">
     <div>
     <table>
         <tr>
@@ -15,17 +23,12 @@
             <td><asp:TextBox ID="Username" runat="server" ></asp:TextBox></td>
         </tr>
         <tr>
-            <td><asp:Label ID="Email_label" runat="server" Text="Email"></asp:Label></td>
-            <td><asp:TextBox ID="Email" runat="server" TextMode="Email" ></asp:TextBox></td>
-        </tr>
-        <tr>
             <td><asp:Label ID="Password_label" runat="server" Text="Password"></asp:Label></td>
             <td><asp:TextBox ID="Passowrd" TextMode="Password" runat="server" ></asp:TextBox></td>
         </tr>
         <tr>
-            <td><asp:Label ID="Date" runat="server" Text="Birth Date"></asp:Label></td>
-            <td><asp:TextBox ID="datepicker" runat="server" TextMode="Date"></asp:TextBox></td>
-            <td><asp:TextBox ID="error" runat="server"></asp:TextBox> </td>
+            <td><asp:Label ID="Date" runat="server" Text="Age"></asp:Label></td>
+            <td><asp:Calendar ID="Age" runat="server"></asp:Calendar></td>
         </tr>
          <tr>
             <td><asp:Button ID="AddUser" runat="server" Text="הרשמה" OnClick="AddUser_Click" /></td>
@@ -33,4 +36,7 @@
         </tr>
     </table>
     </div>  
-</asp:Content>
+        
+    </form>
+</body>
+</html>
