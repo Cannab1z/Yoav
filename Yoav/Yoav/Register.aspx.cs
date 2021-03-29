@@ -12,20 +12,12 @@ namespace Yoav
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            error.Text = Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
         }
         protected void AddUser_Click(object sender, EventArgs e)
         {
-            string[] date = new string[3];
+            string[] date = datepicker.Text.Split('-');
             date = datepicker.Text.Split('-');
             string full_date = date[2] + "." + date[1] + "." + date[0];
-            string first_name = FirstName.Text;
-            string last_name = LastName.Text;
-            string username = Username.Text;
-            string password = Passowrd.Text;
-            string email = Email.Text;
-            //error.Text = Server.MapPath(".") + "\\Yoav_DB.accdb";
-            error.Text = "INSERT INTO users_tbl (FirstName,LastName,Email,UserName,Password,Birthdate) values ('" + FirstName.Text + "','"+ LastName.Text +"','" + Email.Text +"','"+ Username.Text +"','"+Passowrd.Text+"','"+full_date+ "')";
             OleDbConnection con1 = new OleDbConnection();
             con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = "+ Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con1.Open();
@@ -39,7 +31,6 @@ namespace Yoav
             conSer.Parameters.AddWithValue("@birth", full_date);
             int Check = 0;
             Check = conSer.ExecuteNonQuery();
-            Response.Write("You entered: " + Check);
             con1.Close();
         }
     }

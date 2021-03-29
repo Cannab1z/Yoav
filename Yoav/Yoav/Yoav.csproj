@@ -125,6 +125,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="ShowUsers.aspx" />
     <Content Include="Yoav_DB.accdb" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Register.aspx" />
@@ -200,6 +201,13 @@
     </Compile>
     <Compile Include="Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ShowUsers.aspx.cs">
+      <DependentUpon>ShowUsers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ShowUsers.aspx.designer.cs">
+      <DependentUpon>ShowUsers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
