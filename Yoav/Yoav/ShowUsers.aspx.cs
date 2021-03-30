@@ -12,13 +12,14 @@ namespace Yoav
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
         }
         protected void Show_users(object sender, EventArgs e)
         {
             OleDbConnection con1 = new OleDbConnection();
             con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con1.Open();
-            string sqlstring = "select FirstName, LastName, Username, Email, Birthdate FROM users_tbl";
+            string sqlstring = "select FirstName, LastName, Username, Email, user_Password, Birthdate FROM users_tbl";
             OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
             OleDbDataReader Drdr = conSer.ExecuteReader();
             DataListUsers.DataSource = Drdr;
@@ -30,17 +31,29 @@ namespace Yoav
         }*/
         protected void DataListUsers_ItemCommand(object source, DataListCommandEventArgs e)
         {
-            DataListUsers.SelectedIndex = e.Item.ItemIndex;
-            Delete_help.Text = ((Label)DataListUsers.SelectedItem.FindControl("Username")).Text;
-            OleDbConnection con1 = new OleDbConnection();
-            con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
-            con1.Open();
-            string sqlstring = @"Delete * FROM users_tbl WHERE Username = @usr";
-            OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
-            conSer.Parameters.AddWithValue("@usr", Delete_help.Text);
-            OleDbDataReader Drdr = conSer.ExecuteReader();
-            con1.Close();
-            Response.Redirect("Register.aspx");
+            if (e.CommandName == "Delete_command")
+            {
+                DataListUsers.SelectedIndex = e.Item.ItemIndex;
+                Label_help.Text = ((Label)DataListUsers.SelectedItem.FindControl("Username")).Text;
+                OleDbConnection con1 = new OleDbConnection();
+                con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+                con1.Open();
+                string sqlstring = @"Delete * FROM users_tbl WHERE Username = @usr";
+                OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
+                conSer.Parameters.AddWithValue("@usr", Label_help.Text);
+                OleDbDataReader Drdr = conSer.ExecuteReader();
+                con1.Close();
+                Response.Redirect("Register.aspx");
+            }
+            else if (e.CommandName == "Update_command")
+            {
+                DataListUsers.SelectedIndex = e.Item.ItemIndex;
+                Label_help.Text = ((Label)DataListUsers.SelectedItem.FindControl("Username")).Text;
+                Response.Redirect(String.Format("UpdateUser.aspx?Username={0}&Email={1}", Label_help.Text, ((Label)DataListUsers.SelectedItem.FindControl("Email")).Text));
+            }
+            
+            
         }
+
     }
 }

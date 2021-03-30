@@ -28,7 +28,7 @@
             <td><asp:TextBox ID="error" runat="server"></asp:TextBox> </td>
         </tr>
          <tr>
-            <td><asp:Button ID="AddUser" runat="server" Text="הרשמה" OnClick="AddUser_Click" /></td>
+            <td><asp:Button ID="AddUser" runat="server" Text="Register" OnClick="AddUser_Click" /></td>
              <td><input type="reset" /></td>
         </tr>
     </table>

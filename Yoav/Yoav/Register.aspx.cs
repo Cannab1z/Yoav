@@ -32,6 +32,7 @@ namespace Yoav
             int Check = 0;
             Check = conSer.ExecuteNonQuery();
             con1.Close();
+            Response.Redirect("ShowUsers.aspx");
         }
     }
 }

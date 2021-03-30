@@ -55,11 +55,12 @@
                     <ul class="nav navbar-nav navbar-right">
                       <li><a runat="server" href="Register.aspx"><span class="glyphicon glyphicon-user"></span> Register</a></li>
                       <li><a runat="server" href="Login.aspx"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                      <li><asp:LinkButton ID="logout_btn" Visible ="True" runat="server" Text="Logout" onclick="Logout_click"/></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="container body-content">
+        <div class="container body-content ">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />

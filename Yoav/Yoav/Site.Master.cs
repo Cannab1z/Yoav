@@ -13,5 +13,9 @@ namespace Yoav
         {
 
         }
+        protected void Logout_click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
