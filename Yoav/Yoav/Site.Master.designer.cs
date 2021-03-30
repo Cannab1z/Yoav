@@ -15,6 +15,24 @@ namespace Yoav
     {
 
         /// <summary>
+        /// register_btn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton register_btn;
+
+        /// <summary>
+        /// login_btn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton login_btn;
+
+        /// <summary>
         /// logout_btn control.
         /// </summary>
         /// <remarks>

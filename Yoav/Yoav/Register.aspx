@@ -12,7 +12,9 @@
         </tr>
         <tr>
             <td><asp:Label ID="User_Name" runat="server" Text="Username"></asp:Label></td>
-            <td><asp:TextBox ID="Username" runat="server" ></asp:TextBox></td>
+            <td><asp:TextBox ID="Username" runat="server" ></asp:TextBox>
+                <asp:RegularExpressionValidator ID="Username_regex" runat="server" ControlToValidate="Username" ErrorMessage="Username must be 3-16 characters, containing only english letters and numbers." ValidationExpression="^[a-zA-Z0-9]{3,16}$"></asp:RegularExpressionValidator>
+            </td>
         </tr>
         <tr>
             <td><asp:Label ID="Email_label" runat="server" Text="Email"></asp:Label></td>
@@ -25,7 +27,6 @@
         <tr>
             <td><asp:Label ID="Date" runat="server" Text="Birth Date"></asp:Label></td>
             <td><asp:TextBox ID="datepicker" runat="server" TextMode="Date"></asp:TextBox></td>
-            <td><asp:TextBox ID="error" runat="server"></asp:TextBox> </td>
         </tr>
          <tr>
             <td><asp:Button ID="AddUser" runat="server" Text="Register" OnClick="AddUser_Click" /></td>

@@ -69,6 +69,15 @@ namespace Yoav
         protected global::System.Web.UI.WebControls.TextBox Username;
 
         /// <summary>
+        /// Username_regex control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator Username_regex;
+
+        /// <summary>
         /// Email_label control.
         /// </summary>
         /// <remarks>
@@ -121,15 +130,6 @@ namespace Yoav
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox datepicker;
-
-        /// <summary>
-        /// error control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox error;
 
         /// <summary>
         /// AddUser control.

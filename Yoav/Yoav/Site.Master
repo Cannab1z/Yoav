@@ -53,9 +53,9 @@
                         <li><a runat="server" href="ShowUsers.aspx">Show users</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                      <li><a runat="server" href="Register.aspx"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-                      <li><a runat="server" href="Login.aspx"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                      <li><asp:LinkButton ID="logout_btn" Visible ="True" runat="server" Text="Logout" onclick="Logout_click"/></li>
+                      <li><asp:LinkButton ID="register_btn" Visible ="True" runat="server" Text="Register" onclick="Register_click"/></li>
+                      <li><asp:LinkButton ID="login_btn" Visible ="True" runat="server" Text="Login" onclick="Login_click"/></li>
+                      <li><asp:LinkButton ID="logout_btn" Visible ="False" runat="server" Text="Logout" onclick="Logout_click"/></li>
                     </ul>
                 </div>
             </div>
