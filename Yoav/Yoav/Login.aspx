@@ -11,8 +11,8 @@
             <td><asp:TextBox ID="user_pass" TextMode="Password" runat="server" ></asp:TextBox></td>
         </tr>
          <tr>
-            <td><asp:Button ID="CheckLogin" runat="server" Text="Login" OnClick="Check_login" /></td>
-             <td><input type="reset" /></td>
+            <td><asp:Button ID="CheckLogin" runat="server" Text="Login" OnClick="Check_login" CssClass="btn btn-default" /></td>
+             <td><input type="reset" class="btn btn-default" /></td>
         </tr>
         
     </table>

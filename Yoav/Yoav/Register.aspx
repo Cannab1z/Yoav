@@ -29,8 +29,8 @@
             <td><asp:TextBox ID="datepicker" runat="server" TextMode="Date"></asp:TextBox></td>
         </tr>
          <tr>
-            <td><asp:Button ID="AddUser" runat="server" Text="Register" OnClick="AddUser_Click" /></td>
-             <td><input type="reset" /></td>
+            <td><asp:Button ID="AddUser" runat="server" Text="Register" OnClick="AddUser_Click" CssClass="btn btn-default" /></td>
+             <td><input type="reset" class="btn btn-default" /></td>
         </tr>
     </table>
     </div>  
