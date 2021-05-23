@@ -15,11 +15,10 @@ namespace Yoav
             Username.Text = Request.QueryString["Username"];
             if (!IsPostBack)
             {
-                Email.Text = Request.QueryString["Email"];
                 OleDbConnection con1 = new OleDbConnection();
                 con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
                 con1.Open();
-                string sqlstring = @"SELECT FirstName, LastName FROM users_tbl WHERE UserName = @usr";
+                string sqlstring = @"SELECT FirstName, LastName, Email FROM users_tbl WHERE UserName = @usr";
                 OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
                 conSer.Parameters.AddWithValue("@usr", Username.Text);
                 OleDbDataReader Drdr = conSer.ExecuteReader();
@@ -27,6 +26,7 @@ namespace Yoav
                 {
                     if (Drdr.HasRows)
                     {
+                        Email.Text = Drdr.GetString(2);
                         Header.Text = "Welcome " + Drdr.GetString(0) + " " + Drdr.GetString(1);
                     }
                 }

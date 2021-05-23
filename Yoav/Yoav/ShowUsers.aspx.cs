@@ -57,7 +57,7 @@ namespace Yoav
             {
                 DataListUsers.SelectedIndex = e.Item.ItemIndex;
                 Label_help.Text = ((Label)DataListUsers.SelectedItem.FindControl("Username")).Text;
-                Response.Redirect(String.Format("UpdateUser.aspx?Username={0}&Email={1}", Label_help.Text, ((Label)DataListUsers.SelectedItem.FindControl("Email")).Text));
+                Response.Redirect(String.Format("UpdateUser.aspx?Username={0}", Label_help.Text));
             }
             
             
