@@ -46,6 +46,22 @@ namespace Yoav
                 }
                 con1.Close();
             }
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con2.Open();
+            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr ORDER BY Link_order DESC";
+            OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+            conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+            OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            while (Drdr2.Read())
+            {
+                if (Drdr2.HasRows)
+                {
+                    //.
+                }
+            }
+            con2.Close();
+
         }
         protected void Update_User(object sender, EventArgs e)
         {
@@ -53,6 +69,10 @@ namespace Yoav
         }
         protected void Add_Link(object sender, EventArgs e)
         {
+            string link = YoutubeLink.Text;
+            YoutubeData.
+            YoutubeData.DataSource = link;
+            YoutubeData.DataBind();
             YoutubeLink.Text = "";
 
         }
