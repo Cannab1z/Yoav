@@ -8,20 +8,19 @@
         <td><asp:TextBox ID="YoutubeLink" runat="server" Visible="false" ></asp:TextBox>
         <asp:RegularExpressionValidator ID="youtube_regex" runat="server" ControlToValidate="YoutubeLink" ErrorMessage="Unvalid youtube link." ValidationExpression="(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?"></asp:RegularExpressionValidator></td></tr>
         <tr><td><asp:Button ID="User_update" runat="server" Text="Update User" OnClick="Update_User" Visible="false" CssClass="btn btn-default"/></td></tr>
-
+        </table>
+        <div class="row">
         <asp:Repeater ID="YoutubeData" runat="server">
             <ItemTemplate>
-                <object width="480" height="385"><param name="movie" value='<%#DataBinder.Eval(Container.DataItem, "Link") %>'></param>
-                <param name="allowFullScreen" value="true"></param>
-                <param name="allowscriptaccess" value="always"></param>
-                <embed src='<%#DataBinder.Eval(Container.DataItem, "Link") %>' type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385">
-                </embed>
-                </object>
-            <br />    
+                    <div class="col-md-2">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe  class="embed-responsive-item" src='<%#DataBinder.Eval(Container.DataItem,"link" )%>' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                         </div>
+                    </div>
             </ItemTemplate>
-    </asp:Repeater>
 
-    </table>
-    
+    </asp:Repeater>
+    </div>
+    <asp:Label ID="hey" runat="server"></asp:Label>
     
 </asp:Content>
