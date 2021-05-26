@@ -11,7 +11,8 @@ namespace Yoav
 {
     public partial class UserProfile : System.Web.UI.Page
     {
-        public int count = 0;
+        private System.Data.DataSet dataSet = new DataSet();
+        private int count = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Request.QueryString["Username"] == null)
@@ -25,6 +26,7 @@ namespace Yoav
                     Add_link.Visible = true;
                     User_update.Visible = true;
                     YoutubeLink.Visible = true;
+                    Link_Edit.Visible = true;
                 }
             }
             User_Name.Text = Request.QueryString["Username"];
@@ -54,17 +56,21 @@ namespace Yoav
             OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
             conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
-            DataTable dt = new DataTable("table");
+            DataTable dt = new DataTable("youtube");
             DataColumn dc = new DataColumn();
             dc.ColumnName = "link";
+            dt.Columns.Add(dc);
+            dc = new DataColumn("count");
             dt.Columns.Add(dc);
             while (Drdr2.Read())
             {
                 DataRow dr = dt.NewRow();
                 dr["link"] = "https://www.youtube.com/embed/" + Drdr2.GetString(0);
+                dr["count"] = int.Parse(Drdr2.GetString(1));
                 count = int.Parse(Drdr2.GetString(1));
                 dt.Rows.Add(dr);
             }
+            dataSet.Tables.Add(dt);
             YoutubeData.DataSource = dt;
             YoutubeData.DataBind();
             con2.Close();
@@ -76,21 +82,21 @@ namespace Yoav
         }
         protected void Add_Link(object sender, EventArgs e)
         {
-            /*DataTable dt = new DataTable("table");
-            DataColumn dc = new DataColumn();
-            dc.ColumnName = "link";
-            dt.Columns.Add(dc);
-            DataRow dr = dt.NewRow();
-            int found = YoutubeLink.Text.IndexOf("?v=");
-            string link = YoutubeLink.Text.Substring(found + 3);
-            dr["link"] = "https://www.youtube.com/embed/" + link;
-            hey.Text = link;
-            dt.Rows.Add(dr);
-            YoutubeData.DataSource = dt;*/
-            hey.Text = count.ToString();
-            count++;
-            int found = YoutubeLink.Text.IndexOf("?v=");
-            string link = YoutubeLink.Text.Substring(found + 3);
+            int found = 0;
+            if (YoutubeLink.Text.IndexOf("?v=") > -1)
+            {
+                found = YoutubeLink.Text.IndexOf("?v=") + 3;
+            }
+            else if (YoutubeLink.Text.IndexOf("youtu.be/") > -1)
+            {
+                found = YoutubeLink.Text.IndexOf("youtu.be/") + 9;
+            }
+            else
+            {
+                //error message
+                return;
+            }
+            string link = YoutubeLink.Text.Substring(found);
             OleDbConnection con1 = new OleDbConnection();
             con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con1.Open();
@@ -98,11 +104,21 @@ namespace Yoav
             OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
             conSer.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
             conSer.Parameters.AddWithValue("@link", link);
-            conSer.Parameters.AddWithValue("@count", count.ToString());
+            conSer.Parameters.AddWithValue("@count", (count + 1).ToString());
             int Check = 0;
             Check = conSer.ExecuteNonQuery();
             con1.Close();
             YoutubeLink.Text = "";
+            hey.Text = "";
+            Response.Redirect(Request.RawUrl);
+        }
+        protected void Edit_Link(object sender, EventArgs e)
+        {
+            DataTable dt = dataSet.Tables["youtube"];
+            YoutubeData.DataSource = null;
+            YoutubeData.DataBind();
+            //http://img.youtube.com/vi/sR2QIa2XZEA/default.jpg
+
 
         }
     }

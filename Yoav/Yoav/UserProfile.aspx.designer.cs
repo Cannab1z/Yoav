@@ -78,6 +78,15 @@ namespace Yoav
         protected global::System.Web.UI.WebControls.Button User_update;
 
         /// <summary>
+        /// Link_Edit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Link_Edit;
+
+        /// <summary>
         /// YoutubeData control.
         /// </summary>
         /// <remarks>
@@ -85,6 +94,15 @@ namespace Yoav
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater YoutubeData;
+
+        /// <summary>
+        /// YoutubeThumbnail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater YoutubeThumbnail;
 
         /// <summary>
         /// hey control.
