@@ -69,6 +69,15 @@ namespace Yoav
         protected global::System.Web.UI.WebControls.RegularExpressionValidator youtube_regex;
 
         /// <summary>
+        /// youtube_link_error control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label youtube_link_error;
+
+        /// <summary>
         /// User_update control.
         /// </summary>
         /// <remarks>
@@ -85,6 +94,15 @@ namespace Yoav
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Link_Edit;
+
+        /// <summary>
+        /// fdgdfg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button fdgdfg;
 
         /// <summary>
         /// YoutubeData control.

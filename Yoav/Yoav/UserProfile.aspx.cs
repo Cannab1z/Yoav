@@ -82,6 +82,11 @@ namespace Yoav
         }
         protected void Add_Link(object sender, EventArgs e)
         {
+            if (YoutubeLink.Text == "")
+            {
+                youtube_link_error.Text = "you must input a valid youtube link";
+                return;
+            }
             int found = 0;
             if (YoutubeLink.Text.IndexOf("?v=") > -1)
             {
@@ -112,14 +117,34 @@ namespace Yoav
             hey.Text = "";
             Response.Redirect(Request.RawUrl);
         }
-        protected void Edit_Link(object sender, EventArgs e)
+        protected void Edit_Link()
         {
-            DataTable dt = dataSet.Tables["youtube"];
             YoutubeData.DataSource = null;
             YoutubeData.DataBind();
-            //http://img.youtube.com/vi/sR2QIa2XZEA/default.jpg
 
-
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con2.Open();
+            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr ORDER BY Link_order ASC";
+            OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+            conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+            OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            DataTable dt = new DataTable("images");
+            DataColumn dc = new DataColumn("link");
+            dt.Columns.Add(dc);
+            dc = new DataColumn("count");
+            dt.Columns.Add(dc);
+            while (Drdr2.Read())
+            {
+                DataRow dr = dt.NewRow();
+                dr["link"] = "http://img.youtube.com/vi/" + Drdr2.GetString(0) + "/default.jpg";
+                dr["count"] = int.Parse(Drdr2.GetString(1));
+                dt.Rows.Add(dr);
+            }
+            dataSet.Tables.Add(dt);
+            YoutubeThumbnail.DataSource = dt;
+            YoutubeThumbnail.DataBind();
+            con2.Close();
         }
     }
 }
