@@ -30,7 +30,7 @@ namespace Yoav
                 }
             }
             User_Name.Text = Request.QueryString["Username"];
-            if (!IsPostBack)
+            if (!Page.IsPostBack)
             {
                 OleDbConnection con1 = new OleDbConnection();
                 con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
@@ -49,6 +49,11 @@ namespace Yoav
                 }
                 con1.Close();
             }
+            Load_Links();
+            Load_Images();
+        }
+        protected void Load_Links()
+        {
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
@@ -71,10 +76,9 @@ namespace Yoav
                 dt.Rows.Add(dr);
             }
             dataSet.Tables.Add(dt);
+            con2.Close();
             YoutubeData.DataSource = dt;
             YoutubeData.DataBind();
-            con2.Close();
-            hey.Text = count.ToString();
         }
         protected void Update_User(object sender, EventArgs e)
         {
@@ -114,14 +118,10 @@ namespace Yoav
             Check = conSer.ExecuteNonQuery();
             con1.Close();
             YoutubeLink.Text = "";
-            hey.Text = "";
             Response.Redirect(Request.RawUrl);
         }
-        protected void Edit_Link()
+        protected void Load_Images()
         {
-            YoutubeData.DataSource = null;
-            YoutubeData.DataBind();
-
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
@@ -145,6 +145,40 @@ namespace Yoav
             YoutubeThumbnail.DataSource = dt;
             YoutubeThumbnail.DataBind();
             con2.Close();
+        }
+        protected void Edit_Link(object sender, EventArgs e)
+        {
+            if (YoutubeThumbnail.Visible == false)
+            {
+                YoutubeThumbnail.Visible = true;
+                YoutubeData.Visible = false;
+            }
+            else
+            {
+                YoutubeData.Visible = true;
+                YoutubeThumbnail.Visible = false;
+            }
+        }
+        protected void Delete_Link(object sender, EventArgs e)
+        {
+            /*ImageButton btnDel = sender as ImageButton;
+            hey.Text = btnDel.ImageUrl;
+            int found = btnDel.ImageUrl.IndexOf("vi/" + 3);
+            string link = btnDel.ImageUrl.Substring(found);
+            int count;*/
+            int count = 0;
+            foreach (RepeaterItem image in YoutubeThumbnail.Items)
+            {
+
+                CheckBox checkdel = (CheckBox)image.FindControl("checkDel");
+                hey.Text += checkdel.ID;
+                if (checkdel.Checked)
+                {
+                    count++;
+                    //hey.Text = image.ItemIndex.ToString();
+                    
+                }
+            }
         }
     }
 }

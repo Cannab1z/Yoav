@@ -16,12 +16,14 @@ namespace Yoav
                 logout_btn.Visible = false;
                 register_btn.Visible = true;
                 login_btn.Visible = true;
+                profile_btn.Visible = false;
             }
             else
             {
                 logout_btn.Visible = true;
                 register_btn.Visible = false;
                 login_btn.Visible = false;
+                profile_btn.Visible = true;
             }
         }
         protected void Logout_click(object sender, EventArgs e)
@@ -37,6 +39,10 @@ namespace Yoav
         protected void Register_click(object sender, EventArgs e)
         {
             Response.Redirect("Register.aspx");
+        }
+        protected void Profile_click(object sender, EventArgs e)
+        {
+            Response.Redirect("UserProfile.aspx?Username=" + Session["user"]);
         }
     }
 }
