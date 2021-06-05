@@ -11,7 +11,7 @@
         </tr>
         <tr><td><asp:Button ID="User_update" runat="server" Text="Update User" OnClick="Update_User" Visible="false" CssClass="btn btn-default"/></td></tr>
         <tr><td><asp:Button ID="Link_Edit" runat="server" Text="Edit" OnClick="Edit_Link" Visible="false" CssClass="btn btn-default"/></td></tr>
-        <tr><td><asp:Button ID="fdgdfg" runat="server" Text="hey" Visible="true" CssClass="btn btn-default"/></td></tr>
+        <tr><td><asp:Button ID="Edit_Delete" runat="server" OnClick="Checkbox_Visible" Text="select items to delete" CssClass="btn btn-default"/></td></tr>
         </table>
         <div class="row">
         <asp:Repeater ID="YoutubeData" runat="server">
@@ -27,14 +27,16 @@
             <asp:Repeater ID="YoutubeThumbnail" Visible="false" runat="server">
             <ItemTemplate>
                     <div class="col-md-2">
-                        <asp:CheckBox ID="CheckDelete" runat="server" />
+                        <asp:CheckBox ID="CheckDelete" runat="server" Visible="false" />
                         <asp:Image ImageUrl='<%#DataBinder.Eval(Container.DataItem,"link")%>' runat="server" ID="img"/>
+                        <asp:Label ID="img_number" Visible="false" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"count")%>'></asp:Label>
+
                     </div>
             </ItemTemplate>
         </asp:Repeater>
-            <br />
-            <asp:Button Text="Delete all selected items" OnClick="Button_Delete" runat="server" />
     </div>
+    <br />
+    <asp:Button Text="Delete all selected items" OnClick="Button_Delete" Visible="false" ID="delete_btn"  runat="server" />
     <asp:Label ID="hey" runat="server"></asp:Label>
     
 </asp:Content>

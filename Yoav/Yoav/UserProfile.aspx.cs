@@ -53,6 +53,17 @@ namespace Yoav
             Load_Links();
 
         }
+        protected void Checkbox_Visible(object sender, EventArgs e)
+        {
+            YoutubeThumbnail.Visible = true;
+            YoutubeData.Visible = false;
+            foreach (RepeaterItem item in YoutubeThumbnail.Items)
+            {
+                CheckBox checkbox = (CheckBox)item.FindControl("CheckDelete");
+                checkbox.Visible = true;
+            }
+            delete_btn.Visible = true;
+        }
         protected void Load_Links()
         {
             OleDbConnection con2 = new OleDbConnection();
@@ -159,6 +170,12 @@ namespace Yoav
                 YoutubeData.Visible = true;
                 YoutubeThumbnail.Visible = false;
             }
+            foreach (RepeaterItem item in YoutubeThumbnail.Items)
+            {
+                CheckBox checkbox = (CheckBox)item.FindControl("CheckDelete");
+                checkbox.Visible = false;
+            }
+            delete_btn.Visible = false;
         }
         protected void Button_Delete(object sender, EventArgs e)
         {
@@ -168,27 +185,50 @@ namespace Yoav
                 if (chk.Checked)
                 {
                     Image img = ((Image)item.FindControl("img"));
+                    string order = ((Label)item.FindControl("img_number")).Text;
                     string url = img.ImageUrl;
                     int found = url.IndexOf("vi/") + 3;
                     int finish = url.IndexOf("/default.jpg");
                     int last = finish - found;
                     string link = url.Substring(found, last);
-                    Delete_Url(link);
-
+                    Delete_Url(link, order);
+                    Update_links_after_Delete(int.Parse(order));
                 }
             }
             Response.Redirect("UserProfile?Username=" + Session["user"]);
         }
-        protected void Delete_Url(string url)
+        protected void Delete_Url(string url, string order)
         {
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
-            string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND Link = @link";
+            string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND Link = @link AND Link_order = @order";
             OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
             conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
             conSer2.Parameters.AddWithValue("@link", url);
+            conSer2.Parameters.AddWithValue("@order", order);
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            con2.Close();
+        }
+        protected void Update_links_after_Delete(int order) 
+        {
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con2.Open();
+            foreach (DataRow row in dataSet.Tables[0].Rows)
+            {
+                hey.Text += row["count"].ToString();
+                if (int.Parse(row["count"].ToString()) > order)
+                {
+                    row["count"] = ((int.Parse(row["count"].ToString())) - 1).ToString();
+                    string sqlstring2 = @"UPDATE links_tbl SET Link_Order = @order Where Username = @usr AND Link = @link";
+                    OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+                    conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+                    conSer2.Parameters.AddWithValue("@link", row["link"]);
+                    conSer2.Parameters.AddWithValue("@order", row["count"]);
+                    OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+                }
+            }
             con2.Close();
         }
     }
