@@ -27,12 +27,13 @@
             <asp:Repeater ID="YoutubeThumbnail" Visible="false" runat="server">
             <ItemTemplate>
                     <div class="col-md-2">
-                        <asp:CheckBox ID="checkDel" runat="server"/>
-                        <asp:Image ImageUrl='<%#DataBinder.Eval(Container.DataItem,"link")%>' runat="server" />
+                        <asp:CheckBox ID="CheckDelete" runat="server" />
+                        <asp:Image ImageUrl='<%#DataBinder.Eval(Container.DataItem,"link")%>' runat="server" ID="img"/>
                     </div>
             </ItemTemplate>
         </asp:Repeater>
-            <asp:Button Text="delete" OnClick="Delete_Link" runat="server" />
+            <br />
+            <asp:Button Text="Delete all selected items" OnClick="Button_Delete" runat="server" />
     </div>
     <asp:Label ID="hey" runat="server"></asp:Label>
     

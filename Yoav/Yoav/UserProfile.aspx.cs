@@ -48,9 +48,10 @@ namespace Yoav
                     }
                 }
                 con1.Close();
+                Load_Images();
             }
             Load_Links();
-            Load_Images();
+
         }
         protected void Load_Links()
         {
@@ -159,26 +160,36 @@ namespace Yoav
                 YoutubeThumbnail.Visible = false;
             }
         }
-        protected void Delete_Link(object sender, EventArgs e)
+        protected void Button_Delete(object sender, EventArgs e)
         {
-            /*ImageButton btnDel = sender as ImageButton;
-            hey.Text = btnDel.ImageUrl;
-            int found = btnDel.ImageUrl.IndexOf("vi/" + 3);
-            string link = btnDel.ImageUrl.Substring(found);
-            int count;*/
-            int count = 0;
-            foreach (RepeaterItem image in YoutubeThumbnail.Items)
+            foreach (RepeaterItem item in YoutubeThumbnail.Items)
             {
-
-                CheckBox checkdel = (CheckBox)image.FindControl("checkDel");
-                hey.Text += checkdel.ID;
-                if (checkdel.Checked)
+                CheckBox chk = item.FindControl("CheckDelete") as CheckBox;
+                if (chk.Checked)
                 {
-                    count++;
-                    //hey.Text = image.ItemIndex.ToString();
-                    
+                    Image img = ((Image)item.FindControl("img"));
+                    string url = img.ImageUrl;
+                    int found = url.IndexOf("vi/") + 3;
+                    int finish = url.IndexOf("/default.jpg");
+                    int last = finish - found;
+                    string link = url.Substring(found, last);
+                    Delete_Url(link);
+
                 }
             }
+            Response.Redirect("UserProfile?Username=" + Session["user"]);
+        }
+        protected void Delete_Url(string url)
+        {
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con2.Open();
+            string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND Link = @link";
+            OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+            conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+            conSer2.Parameters.AddWithValue("@link", url);
+            OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            con2.Close();
         }
     }
 }
