@@ -6,11 +6,20 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.OleDb;
 using System.Data;
+using System.Web.Services;
+using System.Web.Script.Services;
 
 namespace Yoav
 {
     public partial class UserProfile : System.Web.UI.Page
     {
+        [System.Web.Script.Services.ScriptService]
+        public class ImageDTO
+        {
+            public string id { get; set; }
+            public int order { get; set; }
+        }
+        
         private System.Data.DataSet dataSet = new DataSet();
         private int count = 0;
         protected void Page_Load(object sender, EventArgs e)
@@ -83,8 +92,8 @@ namespace Yoav
             {
                 DataRow dr = dt.NewRow();
                 dr["link"] = "https://www.youtube.com/embed/" + Drdr2.GetString(0);
-                dr["count"] = int.Parse(Drdr2.GetString(1));
-                count = int.Parse(Drdr2.GetString(1));
+                dr["count"] = Drdr2.GetValue(1);
+                count = int.Parse(Drdr2.GetValue(1).ToString());
                 dt.Rows.Add(dr);
             }
             dataSet.Tables.Add(dt);
@@ -125,7 +134,7 @@ namespace Yoav
             OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
             conSer.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
             conSer.Parameters.AddWithValue("@link", link);
-            conSer.Parameters.AddWithValue("@count", (count + 1).ToString());
+            conSer.Parameters.AddWithValue("@count", (count + 1));
             int Check = 0;
             Check = conSer.ExecuteNonQuery();
             con1.Close();
@@ -150,7 +159,7 @@ namespace Yoav
             {
                 DataRow dr = dt.NewRow();
                 dr["link"] = "http://img.youtube.com/vi/" + Drdr2.GetString(0) + "/default.jpg";
-                dr["count"] = int.Parse(Drdr2.GetString(1));
+                dr["count"] = Drdr2.GetValue(1);
                 dt.Rows.Add(dr);
             }
             dataSet.Tables.Add(dt);
@@ -206,27 +215,71 @@ namespace Yoav
             OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
             conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
             conSer2.Parameters.AddWithValue("@link", url);
-            conSer2.Parameters.AddWithValue("@order", order);
+            conSer2.Parameters.AddWithValue("@order", int.Parse(order));
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
             con2.Close();
         }
         protected void Update_links_after_Delete(int order) 
         {
-            OleDbConnection con2 = new OleDbConnection();
-            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
-            con2.Open();
+            
             foreach (DataRow row in dataSet.Tables[0].Rows)
             {
-                hey.Text += row["count"].ToString();
+                
                 if (int.Parse(row["count"].ToString()) > order)
                 {
-                    row["count"] = ((int.Parse(row["count"].ToString())) - 1).ToString();
-                    string sqlstring2 = @"UPDATE links_tbl SET Link_Order = @order Where Username = @usr AND Link = @link";
-                    OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
-                    conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
-                    conSer2.Parameters.AddWithValue("@link", row["link"]);
-                    conSer2.Parameters.AddWithValue("@order", row["count"]);
-                    OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+                    try
+                    {
+                        OleDbConnection con2 = new OleDbConnection();
+                        con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+                        con2.Open();
+                        row["count"] = int.Parse(row["count"].ToString()) - 1;
+                        int start = row["link"].ToString().IndexOf("embed/") + 6;
+                        string link = row["link"].ToString().Substring(start);
+                        int db_count = int.Parse(row["count"].ToString());
+                        int db_count2 = int.Parse(row["count"].ToString()) + 1;
+                        string sqlstring2 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Username = @usr AND Link = @link AND Link_Order = @count2";
+                        using (OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2))
+                        {
+                            conSer2.Parameters.AddWithValue("@count1", db_count);
+                            conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+                            conSer2.Parameters.AddWithValue("@link", link);
+                            conSer2.Parameters.AddWithValue("@count2", db_count2);
+                            int Check = 0;
+                            Check = conSer2.ExecuteNonQuery();
+                        }
+                        
+                        con2.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        hey.Text = e.ToString();
+                    }
+                    
+                }
+            }
+        }
+        [WebMethod]
+        public static void UpdateImagesOrder(List<ImageDTO> d)
+        {
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con2.Open();
+            Page page = HttpContext.Current.Handler as Page;
+            foreach (ImageDTO img in d)
+            {
+                int found = img.id.IndexOf("vi/") + 3;
+                int finish = img.id.IndexOf("/default.jpg");
+                int last = finish - found;
+                string link = img.id.Substring(found, last);
+                //define procedure
+                string sqlstring2 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Link = @link AND Username = @usr";
+                using (OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2))
+                {
+                    conSer2.Parameters.AddWithValue("@count1", img.order);
+                    conSer2.Parameters.AddWithValue("@usr", HttpContext.Current.Request.QueryString["Username"]);
+                    conSer2.Parameters.AddWithValue("@link", link);
+                    int Check = 0;
+                    Check = conSer2.ExecuteNonQuery();
                 }
             }
             con2.Close();

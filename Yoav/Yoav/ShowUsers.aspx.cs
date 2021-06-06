@@ -12,7 +12,7 @@ namespace Yoav
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["user"] == null)
+            if (Session["admin"] == null)
             {
                 Show.Visible = false;
                 Label_help.Text = "You dont have permission to this page, please connect as an admin";
