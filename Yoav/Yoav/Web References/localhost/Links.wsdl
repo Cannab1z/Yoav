@@ -26,6 +26,45 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="Get_Order">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="links" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="start_order" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="order" type="tns:ArrayOfInt" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Get_OrderResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="Final_Order">
+        <s:complexType />
+      </s:element>
+      <s:element name="Final_OrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Final_OrderResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -40,6 +79,18 @@
   <wsdl:message name="GetYoutubeIdSoapOut">
     <wsdl:part name="parameters" element="tns:GetYoutubeIdResponse" />
   </wsdl:message>
+  <wsdl:message name="Get_OrderSoapIn">
+    <wsdl:part name="parameters" element="tns:Get_Order" />
+  </wsdl:message>
+  <wsdl:message name="Get_OrderSoapOut">
+    <wsdl:part name="parameters" element="tns:Get_OrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="Final_OrderSoapIn">
+    <wsdl:part name="parameters" element="tns:Final_Order" />
+  </wsdl:message>
+  <wsdl:message name="Final_OrderSoapOut">
+    <wsdl:part name="parameters" element="tns:Final_OrderResponse" />
+  </wsdl:message>
   <wsdl:portType name="LinksSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -48,6 +99,14 @@
     <wsdl:operation name="GetYoutubeId">
       <wsdl:input message="tns:GetYoutubeIdSoapIn" />
       <wsdl:output message="tns:GetYoutubeIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Get_Order">
+      <wsdl:input message="tns:Get_OrderSoapIn" />
+      <wsdl:output message="tns:Get_OrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Final_Order">
+      <wsdl:input message="tns:Final_OrderSoapIn" />
+      <wsdl:output message="tns:Final_OrderSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="LinksSoap" type="tns:LinksSoap">
@@ -70,6 +129,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="Get_Order">
+      <soap:operation soapAction="http://tempuri.org/Get_Order" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Final_Order">
+      <soap:operation soapAction="http://tempuri.org/Final_Order" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="LinksSoap12" type="tns:LinksSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -84,6 +161,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetYoutubeId">
       <soap12:operation soapAction="http://tempuri.org/GetYoutubeId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_Order">
+      <soap12:operation soapAction="http://tempuri.org/Get_Order" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Final_Order">
+      <soap12:operation soapAction="http://tempuri.org/Final_Order" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

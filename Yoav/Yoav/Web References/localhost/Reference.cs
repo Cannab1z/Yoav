@@ -20,6 +20,7 @@ namespace Yoav.localhost {
     using System.Web.Services.Protocols;
     using System.Xml.Serialization;
     using System.ComponentModel;
+    using System.Data;
     
     
     /// <remarks/>
@@ -32,6 +33,10 @@ namespace Yoav.localhost {
         private System.Threading.SendOrPostCallback HelloWorldOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetYoutubeIdOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback Get_OrderOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback Final_OrderOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -76,6 +81,12 @@ namespace Yoav.localhost {
         
         /// <remarks/>
         public event GetYoutubeIdCompletedEventHandler GetYoutubeIdCompleted;
+        
+        /// <remarks/>
+        public event Get_OrderCompletedEventHandler Get_OrderCompleted;
+        
+        /// <remarks/>
+        public event Final_OrderCompletedEventHandler Final_OrderCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -130,6 +141,65 @@ namespace Yoav.localhost {
             if ((this.GetYoutubeIdCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetYoutubeIdCompleted(this, new GetYoutubeIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/Get_Order", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void Get_Order(string[] links, int[] start_order, int[] order) {
+            this.Invoke("Get_Order", new object[] {
+                        links,
+                        start_order,
+                        order});
+        }
+        
+        /// <remarks/>
+        public void Get_OrderAsync(string[] links, int[] start_order, int[] order) {
+            this.Get_OrderAsync(links, start_order, order, null);
+        }
+        
+        /// <remarks/>
+        public void Get_OrderAsync(string[] links, int[] start_order, int[] order, object userState) {
+            if ((this.Get_OrderOperationCompleted == null)) {
+                this.Get_OrderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGet_OrderOperationCompleted);
+            }
+            this.InvokeAsync("Get_Order", new object[] {
+                        links,
+                        start_order,
+                        order}, this.Get_OrderOperationCompleted, userState);
+        }
+        
+        private void OnGet_OrderOperationCompleted(object arg) {
+            if ((this.Get_OrderCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.Get_OrderCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/Final_Order", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Data.DataTable Final_Order() {
+            object[] results = this.Invoke("Final_Order", new object[0]);
+            return ((System.Data.DataTable)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void Final_OrderAsync() {
+            this.Final_OrderAsync(null);
+        }
+        
+        /// <remarks/>
+        public void Final_OrderAsync(object userState) {
+            if ((this.Final_OrderOperationCompleted == null)) {
+                this.Final_OrderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnFinal_OrderOperationCompleted);
+            }
+            this.InvokeAsync("Final_Order", new object[0], this.Final_OrderOperationCompleted, userState);
+        }
+        
+        private void OnFinal_OrderOperationCompleted(object arg) {
+            if ((this.Final_OrderCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.Final_OrderCompleted(this, new Final_OrderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -200,6 +270,36 @@ namespace Yoav.localhost {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void Get_OrderCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void Final_OrderCompletedEventHandler(object sender, Final_OrderCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class Final_OrderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal Final_OrderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public System.Data.DataTable Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((System.Data.DataTable)(this.results[0]));
             }
         }
     }

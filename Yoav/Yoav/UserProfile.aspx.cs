@@ -190,6 +190,33 @@ namespace Yoav
         }
         protected void Save_Edit(object sender, EventArgs e)
         {
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            localhost.Links save = new localhost.Links();
+            DataTable dt = new DataTable("images");
+            dt = save.Final_Order();
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con2.Open();
+            string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr";
+            OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+            conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+            OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            con2.Close();
+            OleDbConnection con1 = new OleDbConnection();
+            con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con1.Open();
+            foreach (DataRow row in dt.Rows)
+            {
+                string sqlstring = @"INSERT INTO links_tbl (Username, Link, Link_order) values (@usr,@link,@order)";
+                OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
+                conSer.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+                conSer.Parameters.AddWithValue("@link", row[0]);
+                conSer.Parameters.AddWithValue("@order", int.Parse(row[2].ToString()));
+                int Check = 0;
+                Check = conSer.ExecuteNonQuery();
+            }
+
+            con1.Close();
             Response.Redirect("UserProfile?Username=" + query);
         }
         protected void Button_Delete(object sender, EventArgs e)
@@ -264,9 +291,29 @@ namespace Yoav
         }
         [WebMethod]
         //for tommorow: it is currently only doing this for 1 image because I have to somehow update their start order, probably with something related to load_image
-        public  void UpdateImagesOrder(List<ImageDTO> d)
+        public static void UpdateImagesOrder(List<ImageDTO> d)
         {
-            
+            try
+            {
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                localhost.Links images = new localhost.Links();
+                string[] links = new string[d.Count];
+                int[] start_order = new int[d.Count];
+                int[] order = new int[d.Count];
+                int count = 0;
+                foreach (ImageDTO item in d)
+                {
+                    links[count] = item.id;
+                    start_order[count] = item.start;
+                    order[count] = item.order;
+                }
+                images.Get_Order(links,start_order,order);
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write(e.ToString());
+            }
+
             /*
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
