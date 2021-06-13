@@ -52,6 +52,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                         <div class="form-group navbar-form navbar-left">
+                          <asp:LinkButton ID="admin_btn" Visible ="False" runat="server" Text="Show All Users" onclick="Admin_click" CssClass="btn btn-primary navbar-inverse"/>
                           <asp:TextBox runat="server" TextMode="Search" placeholder="Search for Profiles" CssClass="form-control" ID="Search"></asp:TextBox>
                           <asp:LinkButton CssClass="btn btn-primary navbar-inverse" Text="Search"  runat="server" ID="Search_btn" OnClick="Search_click"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></asp:LinkButton>
                         </div>

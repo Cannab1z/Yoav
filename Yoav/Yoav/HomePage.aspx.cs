@@ -18,5 +18,9 @@ namespace Yoav
             string username = Search.Text;
             Response.Redirect("SearchUsers.aspx?Username=" + username);
         }
+        protected void Profile_click(object sender, EventArgs e)
+        {
+            Response.Redirect("SearchUsers.aspx?Username=idankid");
+        }
     }
 }

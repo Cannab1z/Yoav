@@ -25,6 +25,10 @@ namespace Yoav
                 login_btn.Visible = false;
                 profile_btn.Visible = true;
             }
+            if (Session["admin"] == "true")
+            {
+                admin_btn.Visible = true;
+            }
         }
         protected void Logout_click(object sender, EventArgs e)
         {
@@ -48,6 +52,10 @@ namespace Yoav
         {
             string username = Search.Text;
             Response.Redirect("SearchUsers.aspx?Username=" + username);
+        }
+        protected void Admin_click(object sender, EventArgs e)
+        {
+            Response.Redirect("ShowUsers.aspx");
         }
     }
 }

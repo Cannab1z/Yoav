@@ -7,5 +7,18 @@
         <asp:TextBox runat="server" TextMode="Search" placeholder="Search for Profiles" CssClass="form-control" ID="Search"></asp:TextBox>
         <asp:LinkButton CssClass="btn btn-primary" Text="Search"  runat="server" ID="Search_btn" OnClick="Search_click"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></asp:LinkButton>
         </div>
-</div>
+        
+    </div>
+    <div class="row">
+          <div class="col-md-8">
+            <div class="thumbnail">
+              <asp:Image ImageUrl="~/homepage_img.png" runat="server" ID="Image1" />
+              <div class="caption">
+                <h3>IdanKid's Profile</h3>
+                <p>Here is one example of rearranging the videos to make one big image</p>
+                <p><asp:LinkButton runat="server" ID="idankid" OnClick="Profile_click" Text="Go to Idankid's Profile" CssClass="btn btn-default"></asp:LinkButton></p>
+              </div>
+            </div>
+          </div>
+        </div>
 </asp:Content>

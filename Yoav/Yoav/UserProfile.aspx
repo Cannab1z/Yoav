@@ -43,7 +43,8 @@
             padding-right:0;
             padding-left:0;
         }
-        .mark {
+        .transparent {
+            display: none;
         }
     </style>
     <h1><asp:Label ID="User_Name" runat="server" Text="">'s Profile</asp:Label></h1>
@@ -91,5 +92,5 @@
     </div>
     <br />
     <asp:Button Text="Delete all selected items" OnClick="Button_Delete" Visible="false" ID="delete_btn"  runat="server" CssClass="btn btn-default" />
-    <input type="button" value="Save Edit" id="Save_ajax" class="btn btn-default" />
+    <input type="button" value="Save Edit" id="Save_ajax" onClick="window.location.href=window.location.href" class="btn btn-default" />
 </asp:Content>
