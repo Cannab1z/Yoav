@@ -5,39 +5,32 @@
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript">
       $(function () {
-          $("#images").sortable({
-              placeholder: "vacant",
-              update: function (e, ui) {
-                  
-                  var orderArray = [], wrap = {};
-                  $(".jq").each(function () {
-                      $(this).find()
-                      $(this).addClass("highlightRow").siblings().removeClass("highlightRow");
-                  });
-                  $("#images li.mark").each(function (i) {
-                      var imgObj = {
-                          "id": $(this).attr("id"),
-                          "order": i + 1,
-                          "start": $(this).find("li").attr("id")
-                      };
-                      orderArray.push(imgObj);
-                  });
-                  wrap.d = orderArray;
-                  $.ajax({
-                      url: "UserProfile.aspx/UpdateImagesOrder",
-                      type: "POST",
-                      dataType: "json",
-                      data: JSON.stringify(wrap),
-                      contentType: "application/json; charset=utf-8",
-                      success: function (res) {
-                          alert("Yay");
-                      },
-                      error: function (res) {
-                          alert(res.responseText);
-                      }
-                  });
+          $("#images").sortable();
+          $('#Save_ajax').click(function () {
 
-              }
+              var orderArray = [], wrap = {};
+              $("#images li").each(function (i) {
+                  var imgObj = {
+                      "id": $(this).data("id"),
+                      "order": i + 1,
+                  };
+                  orderArray.push(imgObj);
+              });
+              wrap.d = orderArray;
+              $.ajax({
+                  url: "UserProfile.aspx/UpdateImagesOrder",
+                  type: "POST",
+                  dataType: "json",
+                  data: JSON.stringify(wrap),
+                  contentType: "application/json; charset=utf-8",
+                  success: function (res) {
+                      res;
+                  },
+                  error: function (res) {
+                      res;
+                  }
+              });
+
           });
       });
   </script>
@@ -81,12 +74,12 @@
                     </div>
             </ItemTemplate>
         </asp:Repeater>
-            <ul id="images">
+            <div id="images">
             <asp:Repeater ID="YoutubeThumbnail" Visible="false" runat="server">
             <ItemTemplate>
                     <div class="col-md-2 ">
                         <div class="jq">
-                            <li id='<%# DataBinder.Eval(Container.DataItem, "link") %>' class="disabled mark"  ><ul><li id='<%#DataBinder.Eval(Container.DataItem,"count")%>' class="disabled"  ></li></ul></li>
+                            <li data-id='<%# DataBinder.Eval(Container.DataItem, "link") %>' class="disabled mark"  ><ul data-id='<%#DataBinder.Eval(Container.DataItem,"count")%>'></ul></li>
                             <asp:CheckBox ID="CheckDelete" runat="server" Visible="false" />
                             <asp:Image ImageUrl='<%#DataBinder.Eval(Container.DataItem,"link")%>' runat="server" ID="img" CssClass="hey" Height="100px" Width="150px"/>
                             <asp:Label ID="img_number" Visible="false" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"count")%>'></asp:Label>
@@ -94,9 +87,9 @@
                     </div>
             </ItemTemplate>
         </asp:Repeater>
-        </ul>
+        </div>
     </div>
     <br />
     <asp:Button Text="Delete all selected items" OnClick="Button_Delete" Visible="false" ID="delete_btn"  runat="server" CssClass="btn btn-default" />
-    <asp:Button Text="Save Edit" OnClick="Save_Edit" Visible="false" ID="Save"  runat="server" CssClass="btn btn-default" />
+    <input type="button" value="Save Edit" id="Save_ajax" class="btn btn-default" />
 </asp:Content>
