@@ -34,9 +34,6 @@ namespace Yoav
             DataListUsers.DataBind();
             con1.Close();
         }
-        /*protected void Delete_user(object sender, EventArgs e)
-        {
-        }*/
         protected void DataListUsers_ItemCommand(object source, DataListCommandEventArgs e)
         {
             if (e.CommandName == "Delete_command")

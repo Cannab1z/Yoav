@@ -44,5 +44,10 @@ namespace Yoav
         {
             Response.Redirect("UserProfile.aspx?Username=" + Session["user"]);
         }
+        protected void Search_click(object sender, EventArgs e)
+        {
+            string username = Search.Text;
+            Response.Redirect("SearchUsers.aspx?Username=" + username);
+        }
     }
 }

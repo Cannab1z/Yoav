@@ -13,11 +13,14 @@
     </asp:PlaceHolder>
     <webopt:bundlereference runat="server" path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
+    <style>
+        #brand {
+            color:#ff0000;
+        }
+    </style>
 </head>
 <body>
     <form runat="server">
-        <asp:ScriptManager runat="server" EnablePageMethods="True">
             <Scripts>
                 <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
                 <%--Framework Scripts--%>
@@ -45,12 +48,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" runat="server" href="ShowUsers.aspx">Admin</a>
+                    <a class="navbar-brand" runat="server" href="HomePage.aspx" id="brand">YoutubePlaylists</a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a runat="server" href="ShowUsers.aspx">Show users</a></li>
-                    </ul>
+                        <div class="form-group navbar-form navbar-left">
+                          <asp:TextBox runat="server" TextMode="Search" placeholder="Search for Profiles" CssClass="form-control" ID="Search"></asp:TextBox>
+                          <asp:LinkButton CssClass="btn btn-primary navbar-inverse" Text="Search"  runat="server" ID="Search_btn" OnClick="Search_click"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></asp:LinkButton>
+                        </div>
                     <ul class="nav navbar-nav navbar-right">
                         <li><asp:LinkButton ID="profile_btn" Visible ="False" runat="server" Text="Profile" onclick="Profile_click"/></li>
                       <li><asp:LinkButton ID="register_btn" Visible ="True" runat="server" Text="Register" onclick="Register_click"/></li>

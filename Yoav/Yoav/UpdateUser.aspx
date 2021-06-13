@@ -13,11 +13,11 @@
             <td class="col-md-6"><asp:TextBox ID="Username" runat="server" Text="" Enabled ="False"></asp:TextBox></td>
         </tr>
         <tr class="form-group">
-            <td class="col-md-6 control-label"><label><asp:Label ID="Password_label" runat="server" Text="Password"></asp:Label></label></td>
+            <td class="col-md-6 control-label"><label><asp:Label ID="Password_label" runat="server" Text="New Password"></asp:Label></label></td>
             <td class="col-md-6"><asp:TextBox ID="User_pass" TextMode="Password" runat="server" ></asp:TextBox></td>
         </tr>
         <tr class="form-group">
-            <td class="col-md-6 control-label"><label><asp:Label ID="Repeat_Password_label" runat="server" Text="Repeat Password"></asp:Label></label></td>
+            <td class="col-md-6 control-label"><label><asp:Label ID="Repeat_Password_label" runat="server" Text="Repeat New Password"></asp:Label></label></td>
             <td class="col-md-6"><asp:TextBox ID="repeat_user_pass" TextMode="Password" runat="server" ></asp:TextBox></td>
         </tr>
         <tr class="form-group">

@@ -8,6 +8,7 @@ using System.Data.OleDb;
 using System.Data;
 using System.Web.Services;
 using System.Web.Script.Services;
+using System.Net;
 
 namespace Yoav
 {
@@ -18,24 +19,28 @@ namespace Yoav
         {
             public string id { get; set; }
             public int order { get; set; }
+            public int start { get; set; }
         }
-        
+        private localhost.Links order = new localhost.Links();
         private System.Data.DataSet dataSet = new DataSet();
         private int count = 0;
+        public static string query { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            query = Request.QueryString["Username"];
             if (Request.QueryString["Username"] == null)
             {
                 Response.Redirect("Errorpage.aspx");
             }
             if (Session["user"] != null)
             {
-                if (Session["user"].ToString() == Request.QueryString["Username"])
+                if (Session["user"].ToString() == Request.QueryString["Username"] || Session["Admin"].ToString() == "true")
                 {
                     Add_link.Visible = true;
                     User_update.Visible = true;
                     YoutubeLink.Visible = true;
                     Link_Edit.Visible = true;
+                    Edit_Delete.Visible = true;
                 }
             }
             User_Name.Text = Request.QueryString["Username"];
@@ -57,10 +62,14 @@ namespace Yoav
                     }
                 }
                 con1.Close();
+
                 Load_Images();
             }
             Load_Links();
-
+            foreach (DataRow item in dataSet.Tables["youtube"].Rows)
+                {
+                    Response.Write(item[1]);
+                }
         }
         protected void Checkbox_Visible(object sender, EventArgs e)
         {
@@ -96,7 +105,8 @@ namespace Yoav
                 count = int.Parse(Drdr2.GetValue(1).ToString());
                 dt.Rows.Add(dr);
             }
-            dataSet.Tables.Add(dt);
+            if (!dataSet.Tables.Contains("youtube"))
+                dataSet.Tables.Add(dt);
             con2.Close();
             YoutubeData.DataSource = dt;
             YoutubeData.DataBind();
@@ -112,21 +122,9 @@ namespace Yoav
                 youtube_link_error.Text = "you must input a valid youtube link";
                 return;
             }
-            int found = 0;
-            if (YoutubeLink.Text.IndexOf("?v=") > -1)
-            {
-                found = YoutubeLink.Text.IndexOf("?v=") + 3;
-            }
-            else if (YoutubeLink.Text.IndexOf("youtu.be/") > -1)
-            {
-                found = YoutubeLink.Text.IndexOf("youtu.be/") + 9;
-            }
-            else
-            {
-                //error message
-                return;
-            }
-            string link = YoutubeLink.Text.Substring(found);
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            localhost.Links full_link = new localhost.Links();
+            string link = full_link.GetYoutubeId(YoutubeLink.Text).ToString();
             OleDbConnection con1 = new OleDbConnection();
             con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con1.Open();
@@ -162,7 +160,9 @@ namespace Yoav
                 dr["count"] = Drdr2.GetValue(1);
                 dt.Rows.Add(dr);
             }
-            dataSet.Tables.Add(dt);
+            if (!dataSet.Tables.Contains("images"))
+                dataSet.Tables.Add(dt);
+            dataSet.Tables["images"].AcceptChanges();
             YoutubeThumbnail.DataSource = dt;
             YoutubeThumbnail.DataBind();
             con2.Close();
@@ -173,11 +173,13 @@ namespace Yoav
             {
                 YoutubeThumbnail.Visible = true;
                 YoutubeData.Visible = false;
+                Save.Visible = true;
             }
             else
             {
                 YoutubeData.Visible = true;
                 YoutubeThumbnail.Visible = false;
+                Save.Visible = false;
             }
             foreach (RepeaterItem item in YoutubeThumbnail.Items)
             {
@@ -186,103 +188,126 @@ namespace Yoav
             }
             delete_btn.Visible = false;
         }
+        protected void Save_Edit(object sender, EventArgs e)
+        {
+            Response.Redirect("UserProfile?Username=" + query);
+        }
         protected void Button_Delete(object sender, EventArgs e)
         {
-            foreach (RepeaterItem item in YoutubeThumbnail.Items)
+            Stack<int> st = new Stack<int>();
+            for (int i = 0; i < YoutubeThumbnail.Items.Count; i++)
             {
-                CheckBox chk = item.FindControl("CheckDelete") as CheckBox;
+                /*foreach (DataRow hey in dataSet.Tables["youtube"].Rows)
+                {
+                    //Response.Write(hey[1]);
+                }*/
+                CheckBox chk = YoutubeThumbnail.Items[i].FindControl("CheckDelete") as CheckBox;
                 if (chk.Checked)
                 {
-                    Image img = ((Image)item.FindControl("img"));
-                    string order = ((Label)item.FindControl("img_number")).Text;
-                    string url = img.ImageUrl;
-                    int found = url.IndexOf("vi/") + 3;
-                    int finish = url.IndexOf("/default.jpg");
-                    int last = finish - found;
-                    string link = url.Substring(found, last);
-                    Delete_Url(link, order);
-                    Update_links_after_Delete(int.Parse(order));
+                    st.Push(i);
                 }
             }
-            Response.Redirect("UserProfile?Username=" + Session["user"]);
+            while (st.Count > 0)
+            {
+                int i = st.Pop();
+                Image img = ((Image)YoutubeThumbnail.Items[i].FindControl("img"));
+                string order = ((Label)YoutubeThumbnail.Items[i].FindControl("img_number")).Text;
+                string url = img.ImageUrl;
+                int found = url.IndexOf("vi/") + 3;
+                int finish = url.IndexOf("/default.jpg");
+                int last = finish - found;
+                string link = url.Substring(found, last);
+                OleDbConnection con2 = new OleDbConnection();
+                con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+                con2.Open();
+                string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND Link = @link AND Link_order = @order";
+                OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+                conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+                conSer2.Parameters.AddWithValue("@link", link);
+                conSer2.Parameters.AddWithValue("@order", int.Parse(order));
+                OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+                con2.Close();
+                Help_Delete(i);
+                
+            }
+            Response.Redirect("UserProfile?Username=" + query);
         }
-        protected void Delete_Url(string url, string order)
+        private void Help_Delete(int order)
         {
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
-            string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND Link = @link AND Link_order = @order";
+            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr AND Link_order > @order";
             OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
             conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
-            conSer2.Parameters.AddWithValue("@link", url);
-            conSer2.Parameters.AddWithValue("@order", int.Parse(order));
+            conSer2.Parameters.AddWithValue("@order", order);
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            while (Drdr2.Read())
+            {
+                OleDbConnection con3 = new OleDbConnection();
+                con3.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+                con3.Open();
+                string sqlstring3 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Username = @usr AND Link = @link AND Link_Order = @count2";
+                using (OleDbCommand conSer3 = new OleDbCommand(sqlstring3, con3))
+                {
+                    conSer3.Parameters.AddWithValue("@count1", (int.Parse(Drdr2.GetValue(1).ToString()) - 1));
+                    conSer3.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+                    conSer3.Parameters.AddWithValue("@link", Drdr2.GetString(0));
+                    conSer3.Parameters.AddWithValue("@count2", int.Parse(Drdr2.GetValue(1).ToString()));
+                    int Check = 0;
+                    Check = conSer3.ExecuteNonQuery();
+
+                }
+                con3.Close();
+            }
             con2.Close();
         }
-        protected void Update_links_after_Delete(int order) 
+        [WebMethod]
+        //for tommorow: it is currently only doing this for 1 image because I have to somehow update their start order, probably with something related to load_image
+        public  void UpdateImagesOrder(List<ImageDTO> d)
         {
             
-            foreach (DataRow row in dataSet.Tables[0].Rows)
-            {
-                
-                if (int.Parse(row["count"].ToString()) > order)
-                {
-                    try
-                    {
-                        OleDbConnection con2 = new OleDbConnection();
-                        con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
-                        con2.Open();
-                        row["count"] = int.Parse(row["count"].ToString()) - 1;
-                        int start = row["link"].ToString().IndexOf("embed/") + 6;
-                        string link = row["link"].ToString().Substring(start);
-                        int db_count = int.Parse(row["count"].ToString());
-                        int db_count2 = int.Parse(row["count"].ToString()) + 1;
-                        string sqlstring2 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Username = @usr AND Link = @link AND Link_Order = @count2";
-                        using (OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2))
-                        {
-                            conSer2.Parameters.AddWithValue("@count1", db_count);
-                            conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
-                            conSer2.Parameters.AddWithValue("@link", link);
-                            conSer2.Parameters.AddWithValue("@count2", db_count2);
-                            int Check = 0;
-                            Check = conSer2.ExecuteNonQuery();
-                        }
-                        
-                        con2.Close();
-                    }
-                    catch (Exception e)
-                    {
-                        hey.Text = e.ToString();
-                    }
-                    
-                }
-            }
-        }
-        [WebMethod]
-        public static void UpdateImagesOrder(List<ImageDTO> d)
-        {
+            /*
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
             Page page = HttpContext.Current.Handler as Page;
-            foreach (ImageDTO img in d)
+            try
             {
-                int found = img.id.IndexOf("vi/") + 3;
-                int finish = img.id.IndexOf("/default.jpg");
-                int last = finish - found;
-                string link = img.id.Substring(found, last);
-                //define procedure
-                string sqlstring2 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Link = @link AND Username = @usr";
-                using (OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2))
+                foreach (ImageDTO img in d)
                 {
-                    conSer2.Parameters.AddWithValue("@count1", img.order);
-                    conSer2.Parameters.AddWithValue("@usr", HttpContext.Current.Request.QueryString["Username"]);
-                    conSer2.Parameters.AddWithValue("@link", link);
-                    int Check = 0;
-                    Check = conSer2.ExecuteNonQuery();
+                    string order = "";
+                    int found = img.id.IndexOf("vi/") + 3;
+                    int finish = img.id.IndexOf("/default.jpg");
+                    int last = finish - found;
+                    string youtube = img.id.Substring(found, last);
+                    string sqlstring2 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Username = @usr AND Link = @link AND Link_Order = @count2";
+                    using (OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2))
+                    {
+                        conSer2.Parameters.AddWithValue("@count1", int.Parse(img.order.ToString()));
+                        conSer2.Parameters.AddWithValue("@usr", query);
+                        conSer2.Parameters.AddWithValue("@link", youtube);
+                        conSer2.Parameters.AddWithValue("@count2", int.Parse(img.start.ToString()));
+                        int Check = 0;
+                        Check = conSer2.ExecuteNonQuery();
+                        order += img.id;
+                        HttpContext.Current.Response.Write(Check);
+                    }
+                    //HttpContext.Current.Response.Write(img.order);
+                    UserProfile profile = new UserProfile();
+                    //profile.Load_Images();
                 }
+                foreach (DataRow item in dataSet.Tables["youtube"].Rows)
+                {
+                    Response.Write(item[1]);
+                }
+
             }
-            con2.Close();
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("hey");
+            }
+            con2.Close();*/
         }
     }
 }
