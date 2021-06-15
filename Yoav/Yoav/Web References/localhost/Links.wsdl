@@ -26,44 +26,30 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="Get_Order">
+      <s:element name="GetPlaylistNumber">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="links" type="tns:ArrayOfString" />
-            <s:element minOccurs="0" maxOccurs="1" name="start_order" type="tns:ArrayOfInt" />
-            <s:element minOccurs="0" maxOccurs="1" name="order" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="ArrayOfString">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="ArrayOfInt">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
-        </s:sequence>
-      </s:complexType>
-      <s:element name="Get_OrderResponse">
-        <s:complexType />
-      </s:element>
-      <s:element name="Final_Order">
-        <s:complexType />
-      </s:element>
-      <s:element name="Final_OrderResponse">
+      <s:element name="GetPlaylistNumberResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="Final_OrderResult">
-              <s:complexType>
-                <s:sequence>
-                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
-                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
-                </s:sequence>
-              </s:complexType>
-            </s:element>
+            <s:element minOccurs="1" maxOccurs="1" name="GetPlaylistNumberResult" type="s:int" />
           </s:sequence>
         </s:complexType>
+      </s:element>
+      <s:element name="AddPlaylist">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddPlaylistResponse">
+        <s:complexType />
       </s:element>
     </s:schema>
   </wsdl:types>
@@ -79,17 +65,17 @@
   <wsdl:message name="GetYoutubeIdSoapOut">
     <wsdl:part name="parameters" element="tns:GetYoutubeIdResponse" />
   </wsdl:message>
-  <wsdl:message name="Get_OrderSoapIn">
-    <wsdl:part name="parameters" element="tns:Get_Order" />
+  <wsdl:message name="GetPlaylistNumberSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPlaylistNumber" />
   </wsdl:message>
-  <wsdl:message name="Get_OrderSoapOut">
-    <wsdl:part name="parameters" element="tns:Get_OrderResponse" />
+  <wsdl:message name="GetPlaylistNumberSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPlaylistNumberResponse" />
   </wsdl:message>
-  <wsdl:message name="Final_OrderSoapIn">
-    <wsdl:part name="parameters" element="tns:Final_Order" />
+  <wsdl:message name="AddPlaylistSoapIn">
+    <wsdl:part name="parameters" element="tns:AddPlaylist" />
   </wsdl:message>
-  <wsdl:message name="Final_OrderSoapOut">
-    <wsdl:part name="parameters" element="tns:Final_OrderResponse" />
+  <wsdl:message name="AddPlaylistSoapOut">
+    <wsdl:part name="parameters" element="tns:AddPlaylistResponse" />
   </wsdl:message>
   <wsdl:portType name="LinksSoap">
     <wsdl:operation name="HelloWorld">
@@ -100,13 +86,13 @@
       <wsdl:input message="tns:GetYoutubeIdSoapIn" />
       <wsdl:output message="tns:GetYoutubeIdSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="Get_Order">
-      <wsdl:input message="tns:Get_OrderSoapIn" />
-      <wsdl:output message="tns:Get_OrderSoapOut" />
+    <wsdl:operation name="GetPlaylistNumber">
+      <wsdl:input message="tns:GetPlaylistNumberSoapIn" />
+      <wsdl:output message="tns:GetPlaylistNumberSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="Final_Order">
-      <wsdl:input message="tns:Final_OrderSoapIn" />
-      <wsdl:output message="tns:Final_OrderSoapOut" />
+    <wsdl:operation name="AddPlaylist">
+      <wsdl:input message="tns:AddPlaylistSoapIn" />
+      <wsdl:output message="tns:AddPlaylistSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="LinksSoap" type="tns:LinksSoap">
@@ -129,8 +115,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Get_Order">
-      <soap:operation soapAction="http://tempuri.org/Get_Order" style="document" />
+    <wsdl:operation name="GetPlaylistNumber">
+      <soap:operation soapAction="http://tempuri.org/GetPlaylistNumber" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -138,8 +124,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Final_Order">
-      <soap:operation soapAction="http://tempuri.org/Final_Order" style="document" />
+    <wsdl:operation name="AddPlaylist">
+      <soap:operation soapAction="http://tempuri.org/AddPlaylist" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -168,8 +154,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Get_Order">
-      <soap12:operation soapAction="http://tempuri.org/Get_Order" style="document" />
+    <wsdl:operation name="GetPlaylistNumber">
+      <soap12:operation soapAction="http://tempuri.org/GetPlaylistNumber" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -177,8 +163,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Final_Order">
-      <soap12:operation soapAction="http://tempuri.org/Final_Order" style="document" />
+    <wsdl:operation name="AddPlaylist">
+      <soap12:operation soapAction="http://tempuri.org/AddPlaylist" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

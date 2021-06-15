@@ -56,7 +56,18 @@
         <asp:RegularExpressionValidator ID="youtube_regex" runat="server" ControlToValidate="YoutubeLink" ErrorMessage="Unvalid youtube link." ValidationExpression="(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?"></asp:RegularExpressionValidator></td>
         <td><asp:Label ID="youtube_link_error" runat="server"></asp:Label></td>
         </tr>
-        </table>
+        <tr><td><asp:Button ID="Add_playlist" runat="server" Text="Add Playlist" OnClick="Add_playlist_click" Visible="false" CssClass="btn btn-default"/><td>
+    </table>
+    <br />
+    <asp:Label ID="Label1" runat="server" Text="Currently viewing playlist number: "></asp:Label><asp:Label ID="Current" runat="server" Text="1"></asp:Label>
+    <br />
+    <asp:Label ID="Label2" runat="server" Text="Playlist name: "></asp:Label><asp:Label ID="PL_name" runat="server" Text=""></asp:Label>
+    <br />
+    <asp:DataList ID="Playlist_lists" OnItemCommand="Playlist_ItemCommand" runat="server" RepeatDirection="Horizontal">
+        <ItemTemplate>
+            <asp:Button ID="number" Text='<%#DataBinder.Eval(Container.DataItem,"number" )%>' runat="server" CommandName="Click" CssClass="btn btn-default" />
+        </ItemTemplate>
+    </asp:DataList>
     <br />
     <div class="row">
         <div class="col-md-2"><asp:Button ID="User_update" runat="server" Text="Update Profile" OnClick="Update_User" Visible="false" CssClass="btn btn-default"/></div>
@@ -93,4 +104,5 @@
     <br />
     <asp:Button Text="Delete all selected items" OnClick="Button_Delete" Visible="false" ID="delete_btn"  runat="server" CssClass="btn btn-default" />
     <input type="button" value="Save Edit" id="Save_ajax" onClick="window.location.href=window.location.href" class="btn btn-default" />
+    <asp:Label ID="err" Text="" runat="server" />
 </asp:Content>

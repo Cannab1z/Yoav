@@ -24,6 +24,7 @@ namespace Yoav
         private System.Data.DataSet dataSet = new DataSet();
         private int count = 0;
         public static string query { get; set; }
+        public static string current1 { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             query = Request.QueryString["Username"];
@@ -31,17 +32,31 @@ namespace Yoav
             {
                 Response.Redirect("Errorpage.aspx");
             }
+            if (Request.QueryString["playlist"] == null)
+            {
+                Current.Text = "1";
+            }
+            else if (int.Parse(Request.QueryString["playlist"].ToString()) > 0 && int.Parse(Request.QueryString["playlist"].ToString()) < 100)
+            {
+                Current.Text = Request.QueryString["playlist"].ToString();
+            }
+            else
+            {
+                Response.Redirect("Errorpage.aspx");
+            }
             if (Session["user"] != null)
             {
-                if (Session["user"].ToString() == Request.QueryString["Username"] || Session["Admin"].ToString() == "true")
+                if (Session["user"].ToString() == Request.QueryString["Username"].ToString() || Session["Admin"] == "true")
                 {
                     Add_link.Visible = true;
                     User_update.Visible = true;
                     YoutubeLink.Visible = true;
                     Link_Edit.Visible = true;
                     Edit_Delete.Visible = true;
+                    Add_playlist.Visible = true;
                 }
             }
+            current1 = Current.Text;
             User_Name.Text = Request.QueryString["Username"];
             if (!Page.IsPostBack)
             {
@@ -63,8 +78,10 @@ namespace Yoav
                 con1.Close();
 
                 Load_Images();
+                Load_Playlists();
             }
             Load_Links();
+
         }
         protected void Checkbox_Visible(object sender, EventArgs e)
         {
@@ -77,14 +94,42 @@ namespace Yoav
             }
             delete_btn.Visible = true;
         }
+        protected void Load_Playlists()
+        {
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            localhost.Links item = new localhost.Links();
+            int num_of_playlists = item.GetPlaylistNumber(Request.QueryString["Username"].ToString());
+            DataTable dt = new DataTable("playlists");
+            DataColumn dc = new DataColumn("number");
+            dt.Columns.Add(dc);
+            for (int i = 0; i < num_of_playlists; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr["number"] = i + 1;
+                dt.Rows.Add(dr);
+            }
+            Playlist_lists.DataSource = dt;
+            Playlist_lists.DataBind();
+
+        }
+        protected void Playlist_ItemCommand(object source, DataListCommandEventArgs e)
+        {
+            if (e.CommandName == "Click")
+            {
+                Playlist_lists.SelectedIndex = e.Item.ItemIndex;
+                string selected = ((Button)Playlist_lists.SelectedItem.FindControl("number")).Text;
+                Response.Redirect("UserProfile.aspx?Username=" + Request.QueryString["Username"] + "&playlist=" + selected);
+            }
+        }
         protected void Load_Links()
         {
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
-            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr ORDER BY Link_order ASC";
+            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr AND List_number = @num ORDER BY Link_order ASC";
             OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
             conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+            conSer2.Parameters.AddWithValue("@num", Current.Text);
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
             DataTable dt = new DataTable("youtube");
             DataColumn dc = new DataColumn();
@@ -94,6 +139,7 @@ namespace Yoav
             dt.Columns.Add(dc);
             while (Drdr2.Read())
             {
+                err.Text += "hey";
                 DataRow dr = dt.NewRow();
                 dr["link"] = "https://www.youtube.com/embed/" + Drdr2.GetString(0);
                 dr["count"] = Drdr2.GetValue(1);
@@ -123,25 +169,31 @@ namespace Yoav
             OleDbConnection con1 = new OleDbConnection();
             con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con1.Open();
-            string sqlstring = @"INSERT INTO links_tbl (Username ,Link, Link_Order) values (@usr,@link,@count)";
+            string sqlstring = @"INSERT INTO links_tbl (Username ,Link, Link_Order, List_number) values (@usr,@link,@count,@num)";
             OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
             conSer.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
             conSer.Parameters.AddWithValue("@link", link);
             conSer.Parameters.AddWithValue("@count", (count + 1));
+            conSer.Parameters.AddWithValue("@num", Current.Text);
             int Check = 0;
             Check = conSer.ExecuteNonQuery();
             con1.Close();
             YoutubeLink.Text = "";
             Response.Redirect(Request.RawUrl);
         }
+        protected void Add_playlist_click(object sender, EventArgs e)
+        {
+            Response.Redirect("new_playlist.aspx");
+        }
         protected void Load_Images()
         {
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
-            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr ORDER BY Link_order ASC";
+            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr AND List_number = @num ORDER BY Link_order ASC";
             OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
             conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+            conSer2.Parameters.AddWithValue("@num", Current.Text);
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
             DataTable dt = new DataTable("images");
             DataColumn dc = new DataColumn("link");
@@ -207,11 +259,12 @@ namespace Yoav
                 OleDbConnection con2 = new OleDbConnection();
                 con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
                 con2.Open();
-                string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND Link = @link AND Link_order = @order";
+                string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND Link = @link AND Link_order = @order AND List_number = @num";
                 OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
                 conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
                 conSer2.Parameters.AddWithValue("@link", link);
                 conSer2.Parameters.AddWithValue("@order", int.Parse(order));
+                conSer2.Parameters.AddWithValue("@num", Current.Text);
                 OleDbDataReader Drdr2 = conSer2.ExecuteReader();
                 con2.Close();
                 Help_Delete(i);
@@ -224,23 +277,25 @@ namespace Yoav
             OleDbConnection con2 = new OleDbConnection();
             con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
             con2.Open();
-            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr AND Link_order > @order";
+            string sqlstring2 = @"SELECT Link, Link_order FROM links_tbl WHERE Username = @usr AND List_number = @num AND Link_order > @order";
             OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
             conSer2.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
             conSer2.Parameters.AddWithValue("@order", order);
+            conSer2.Parameters.AddWithValue("@num", Current.Text);
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
             while (Drdr2.Read())
             {
                 OleDbConnection con3 = new OleDbConnection();
                 con3.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
                 con3.Open();
-                string sqlstring3 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Username = @usr AND Link = @link AND Link_Order = @count2";
+                string sqlstring3 = @"UPDATE links_tbl SET Link_Order = @count1 WHERE Username = @usr AND Link = @link AND Link_Order = @count2 AND List_number = @num";
                 using (OleDbCommand conSer3 = new OleDbCommand(sqlstring3, con3))
                 {
                     conSer3.Parameters.AddWithValue("@count1", (int.Parse(Drdr2.GetValue(1).ToString()) - 1));
                     conSer3.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
                     conSer3.Parameters.AddWithValue("@link", Drdr2.GetString(0));
                     conSer3.Parameters.AddWithValue("@count2", int.Parse(Drdr2.GetValue(1).ToString()));
+                    conSer3.Parameters.AddWithValue("@num", Current.Text);
                     int Check = 0;
                     Check = conSer3.ExecuteNonQuery();
 
@@ -255,9 +310,10 @@ namespace Yoav
                 OleDbConnection con2 = new OleDbConnection();
                 con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
                 con2.Open();
-                string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr";
+                string sqlstring2 = @"Delete * FROM links_tbl WHERE Username = @usr AND List_number = @num";
                 OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
                 conSer2.Parameters.AddWithValue("@usr", query);
+                conSer2.Parameters.AddWithValue("@num", current1);
                 OleDbDataReader Drdr2 = conSer2.ExecuteReader();
                 con2.Close();
 
@@ -271,12 +327,13 @@ namespace Yoav
                     int finish = url.IndexOf("/default.jpg");
                     int last = finish - found;
                     string link = url.Substring(found, last);
-                    string sqlstring = @"INSERT INTO links_tbl (Username, Link, Link_order) values (@usr,@link,@order)";
+                    string sqlstring = @"INSERT INTO links_tbl (Username, Link, Link_order, List_number) values (@usr,@link,@order,@num)";
                     OleDbCommand conSer = new OleDbCommand(sqlstring, con1);
                     conSer.Parameters.AddWithValue("@usr", query);
                     conSer.Parameters.AddWithValue("@link", link);
                     conSer.Parameters.AddWithValue("@order", row.order);
-                    int Check = 0;
+                    conSer.Parameters.AddWithValue("@num", current1);
+                int Check = 0;
                     Check = conSer.ExecuteNonQuery();
                 }
                 con1.Close();

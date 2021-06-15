@@ -20,7 +20,6 @@ namespace Yoav.localhost {
     using System.Web.Services.Protocols;
     using System.Xml.Serialization;
     using System.ComponentModel;
-    using System.Data;
     
     
     /// <remarks/>
@@ -34,9 +33,9 @@ namespace Yoav.localhost {
         
         private System.Threading.SendOrPostCallback GetYoutubeIdOperationCompleted;
         
-        private System.Threading.SendOrPostCallback Get_OrderOperationCompleted;
+        private System.Threading.SendOrPostCallback GetPlaylistNumberOperationCompleted;
         
-        private System.Threading.SendOrPostCallback Final_OrderOperationCompleted;
+        private System.Threading.SendOrPostCallback AddPlaylistOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -83,10 +82,10 @@ namespace Yoav.localhost {
         public event GetYoutubeIdCompletedEventHandler GetYoutubeIdCompleted;
         
         /// <remarks/>
-        public event Get_OrderCompletedEventHandler Get_OrderCompleted;
+        public event GetPlaylistNumberCompletedEventHandler GetPlaylistNumberCompleted;
         
         /// <remarks/>
-        public event Final_OrderCompletedEventHandler Final_OrderCompleted;
+        public event AddPlaylistCompletedEventHandler AddPlaylistCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -145,61 +144,61 @@ namespace Yoav.localhost {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/Get_Order", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void Get_Order(string[] links, int[] start_order, int[] order) {
-            this.Invoke("Get_Order", new object[] {
-                        links,
-                        start_order,
-                        order});
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPlaylistNumber", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public int GetPlaylistNumber(string username) {
+            object[] results = this.Invoke("GetPlaylistNumber", new object[] {
+                        username});
+            return ((int)(results[0]));
         }
         
         /// <remarks/>
-        public void Get_OrderAsync(string[] links, int[] start_order, int[] order) {
-            this.Get_OrderAsync(links, start_order, order, null);
+        public void GetPlaylistNumberAsync(string username) {
+            this.GetPlaylistNumberAsync(username, null);
         }
         
         /// <remarks/>
-        public void Get_OrderAsync(string[] links, int[] start_order, int[] order, object userState) {
-            if ((this.Get_OrderOperationCompleted == null)) {
-                this.Get_OrderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGet_OrderOperationCompleted);
+        public void GetPlaylistNumberAsync(string username, object userState) {
+            if ((this.GetPlaylistNumberOperationCompleted == null)) {
+                this.GetPlaylistNumberOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPlaylistNumberOperationCompleted);
             }
-            this.InvokeAsync("Get_Order", new object[] {
-                        links,
-                        start_order,
-                        order}, this.Get_OrderOperationCompleted, userState);
+            this.InvokeAsync("GetPlaylistNumber", new object[] {
+                        username}, this.GetPlaylistNumberOperationCompleted, userState);
         }
         
-        private void OnGet_OrderOperationCompleted(object arg) {
-            if ((this.Get_OrderCompleted != null)) {
+        private void OnGetPlaylistNumberOperationCompleted(object arg) {
+            if ((this.GetPlaylistNumberCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.Get_OrderCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.GetPlaylistNumberCompleted(this, new GetPlaylistNumberCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/Final_Order", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public System.Data.DataTable Final_Order() {
-            object[] results = this.Invoke("Final_Order", new object[0]);
-            return ((System.Data.DataTable)(results[0]));
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/AddPlaylist", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void AddPlaylist(string username, string name) {
+            this.Invoke("AddPlaylist", new object[] {
+                        username,
+                        name});
         }
         
         /// <remarks/>
-        public void Final_OrderAsync() {
-            this.Final_OrderAsync(null);
+        public void AddPlaylistAsync(string username, string name) {
+            this.AddPlaylistAsync(username, name, null);
         }
         
         /// <remarks/>
-        public void Final_OrderAsync(object userState) {
-            if ((this.Final_OrderOperationCompleted == null)) {
-                this.Final_OrderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnFinal_OrderOperationCompleted);
+        public void AddPlaylistAsync(string username, string name, object userState) {
+            if ((this.AddPlaylistOperationCompleted == null)) {
+                this.AddPlaylistOperationCompleted = new System.Threading.SendOrPostCallback(this.OnAddPlaylistOperationCompleted);
             }
-            this.InvokeAsync("Final_Order", new object[0], this.Final_OrderOperationCompleted, userState);
+            this.InvokeAsync("AddPlaylist", new object[] {
+                        username,
+                        name}, this.AddPlaylistOperationCompleted, userState);
         }
         
-        private void OnFinal_OrderOperationCompleted(object arg) {
-            if ((this.Final_OrderCompleted != null)) {
+        private void OnAddPlaylistOperationCompleted(object arg) {
+            if ((this.AddPlaylistCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.Final_OrderCompleted(this, new Final_OrderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.AddPlaylistCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -276,33 +275,33 @@ namespace Yoav.localhost {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
-    public delegate void Get_OrderCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
-    public delegate void Final_OrderCompletedEventHandler(object sender, Final_OrderCompletedEventArgs e);
+    public delegate void GetPlaylistNumberCompletedEventHandler(object sender, GetPlaylistNumberCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class Final_OrderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GetPlaylistNumberCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        internal Final_OrderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        internal GetPlaylistNumberCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
         
         /// <remarks/>
-        public System.Data.DataTable Result {
+        public int Result {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((System.Data.DataTable)(this.results[0]));
+                return ((int)(this.results[0]));
             }
         }
     }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void AddPlaylistCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591
