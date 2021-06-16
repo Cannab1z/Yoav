@@ -57,6 +57,25 @@ namespace yoav2
             return playlist_number;
         }
         [WebMethod]
+        public string GetPlaylistName(string username, int num)
+        {
+            string name = "";
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\playlist.accdb";
+            con2.Open();
+            string sqlstring2 = @"SELECT Playlist_name FROM Playlists WHERE Username = @usr AND Playlist_number = @num";
+            OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+            conSer2.Parameters.AddWithValue("@usr", username);
+            conSer2.Parameters.AddWithValue("@num", num);
+            OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            while (Drdr2.Read())
+            {
+               name = Drdr2["Playlist_name"].ToString();
+            }
+            con2.Close();
+            return name;
+        }
+        [WebMethod]
         public void AddPlaylist(string username, string name)
         {
             int num = GetPlaylistNumber(username);
@@ -71,6 +90,11 @@ namespace yoav2
             int Check = 0;
             Check = conSer.ExecuteNonQuery();
             con1.Close();
+        }
+        [WebMethod]
+        public void DeletePlaylist(string username, int num)
+        { 
+            
         }
     }
 }

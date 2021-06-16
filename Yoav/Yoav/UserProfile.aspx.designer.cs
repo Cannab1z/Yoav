@@ -123,6 +123,24 @@ namespace Yoav
         protected global::System.Web.UI.WebControls.Label PL_name;
 
         /// <summary>
+        /// Copy_playlist control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Copy_playlist;
+
+        /// <summary>
+        /// Delete_playlist control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Delete_playlist;
+
+        /// <summary>
         /// Playlist_lists control.
         /// </summary>
         /// <remarks>
@@ -184,14 +202,5 @@ namespace Yoav
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button delete_btn;
-
-        /// <summary>
-        /// err control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label err;
     }
 }

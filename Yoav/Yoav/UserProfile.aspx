@@ -43,6 +43,10 @@
             padding-right:0;
             padding-left:0;
         }
+        .pad {
+            padding-bottom:10px;
+            padding-top:10px;
+        }
         .transparent {
             display: none;
         }
@@ -63,6 +67,10 @@
     <br />
     <asp:Label ID="Label2" runat="server" Text="Playlist name: "></asp:Label><asp:Label ID="PL_name" runat="server" Text=""></asp:Label>
     <br />
+    <asp:Button ID="Copy_playlist" runat="server" OnClick="Copy_PL" Visible="true" Text="Add This Playlist To Your Profile" CssClass="btn btn-default"/>
+    <br />
+    <!--<asp:Button ID="Delete_playlist" runat="server" OnClick="Delete_PL" Visible="false" Text="Delete This Playlist" CssClass="btn btn-danger"/>-->
+    <br />
     <asp:DataList ID="Playlist_lists" OnItemCommand="Playlist_ItemCommand" runat="server" RepeatDirection="Horizontal">
         <ItemTemplate>
             <asp:Button ID="number" Text='<%#DataBinder.Eval(Container.DataItem,"number" )%>' runat="server" CommandName="Click" CssClass="btn btn-default" />
@@ -75,7 +83,7 @@
         <div class="col-md-2"><asp:Button ID="Edit_Delete" runat="server" OnClick="Checkbox_Visible" Visible="false" Text="Select Items To Delete" CssClass="btn btn-default"/></div>
     </div>
     <br />
-        <div class="row">
+        <div class="row pad">
         <asp:Repeater ID="YoutubeData" runat="server">
             <ItemTemplate>
                     <div class="col-md-2">
@@ -84,8 +92,11 @@
                          </div>
                         <!--<asp:Label ID="count" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"count" )%>'></asp:Label>-->
                     </div>
+                <%# (Container.ItemIndex + 1) % 6 == 0 ? "</div><div class='row pad'>" : string.Empty%>
             </ItemTemplate>
         </asp:Repeater>
+            </div>
+    <div class="row">
             <div id="images">
             <asp:Repeater ID="YoutubeThumbnail" Visible="false" runat="server">
             <ItemTemplate>
@@ -104,5 +115,4 @@
     <br />
     <asp:Button Text="Delete all selected items" OnClick="Button_Delete" Visible="false" ID="delete_btn"  runat="server" CssClass="btn btn-default" />
     <input type="button" value="Save Edit" id="Save_ajax" onClick="window.location.href=window.location.href" class="btn btn-default" />
-    <asp:Label ID="err" Text="" runat="server" />
 </asp:Content>

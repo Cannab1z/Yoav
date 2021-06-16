@@ -35,6 +35,8 @@ namespace Yoav.localhost {
         
         private System.Threading.SendOrPostCallback GetPlaylistNumberOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetPlaylistNameOperationCompleted;
+        
         private System.Threading.SendOrPostCallback AddPlaylistOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
@@ -83,6 +85,9 @@ namespace Yoav.localhost {
         
         /// <remarks/>
         public event GetPlaylistNumberCompletedEventHandler GetPlaylistNumberCompleted;
+        
+        /// <remarks/>
+        public event GetPlaylistNameCompletedEventHandler GetPlaylistNameCompleted;
         
         /// <remarks/>
         public event AddPlaylistCompletedEventHandler AddPlaylistCompleted;
@@ -169,6 +174,37 @@ namespace Yoav.localhost {
             if ((this.GetPlaylistNumberCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetPlaylistNumberCompleted(this, new GetPlaylistNumberCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPlaylistName", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string GetPlaylistName(string username, int num) {
+            object[] results = this.Invoke("GetPlaylistName", new object[] {
+                        username,
+                        num});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetPlaylistNameAsync(string username, int num) {
+            this.GetPlaylistNameAsync(username, num, null);
+        }
+        
+        /// <remarks/>
+        public void GetPlaylistNameAsync(string username, int num, object userState) {
+            if ((this.GetPlaylistNameOperationCompleted == null)) {
+                this.GetPlaylistNameOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPlaylistNameOperationCompleted);
+            }
+            this.InvokeAsync("GetPlaylistName", new object[] {
+                        username,
+                        num}, this.GetPlaylistNameOperationCompleted, userState);
+        }
+        
+        private void OnGetPlaylistNameOperationCompleted(object arg) {
+            if ((this.GetPlaylistNameCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetPlaylistNameCompleted(this, new GetPlaylistNameCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -295,6 +331,32 @@ namespace Yoav.localhost {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((int)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void GetPlaylistNameCompletedEventHandler(object sender, GetPlaylistNameCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetPlaylistNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetPlaylistNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
             }
         }
     }

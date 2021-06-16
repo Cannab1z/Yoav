@@ -21,6 +21,7 @@ namespace Yoav
         {
             localhost.Links connect = new localhost.Links();
             connect.AddPlaylist(Session["user"].ToString(), PL_text.Text);
+            Response.Redirect("UserProfile.aspx?Username=" + Session["user"]);
         }
     }
 }

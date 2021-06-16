@@ -40,6 +40,21 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetPlaylistName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPlaylistNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPlaylistNameResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="AddPlaylist">
         <s:complexType>
           <s:sequence>
@@ -71,6 +86,12 @@
   <wsdl:message name="GetPlaylistNumberSoapOut">
     <wsdl:part name="parameters" element="tns:GetPlaylistNumberResponse" />
   </wsdl:message>
+  <wsdl:message name="GetPlaylistNameSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPlaylistName" />
+  </wsdl:message>
+  <wsdl:message name="GetPlaylistNameSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPlaylistNameResponse" />
+  </wsdl:message>
   <wsdl:message name="AddPlaylistSoapIn">
     <wsdl:part name="parameters" element="tns:AddPlaylist" />
   </wsdl:message>
@@ -89,6 +110,10 @@
     <wsdl:operation name="GetPlaylistNumber">
       <wsdl:input message="tns:GetPlaylistNumberSoapIn" />
       <wsdl:output message="tns:GetPlaylistNumberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlaylistName">
+      <wsdl:input message="tns:GetPlaylistNameSoapIn" />
+      <wsdl:output message="tns:GetPlaylistNameSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="AddPlaylist">
       <wsdl:input message="tns:AddPlaylistSoapIn" />
@@ -117,6 +142,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPlaylistNumber">
       <soap:operation soapAction="http://tempuri.org/GetPlaylistNumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlaylistName">
+      <soap:operation soapAction="http://tempuri.org/GetPlaylistName" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -156,6 +190,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPlaylistNumber">
       <soap12:operation soapAction="http://tempuri.org/GetPlaylistNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlaylistName">
+      <soap12:operation soapAction="http://tempuri.org/GetPlaylistName" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
