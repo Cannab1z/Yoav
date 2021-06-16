@@ -27,6 +27,7 @@ namespace Yoav
         public static string current1 { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            Label3.Text = "";
             query = Request.QueryString["Username"];
             if (Request.QueryString["Username"] == null)
             {
@@ -34,7 +35,11 @@ namespace Yoav
             }
             if (Request.QueryString["playlist"] == null)
             {
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                localhost.Links item = new localhost.Links();
                 Current.Text = "1";
+                PL_name.Text = item.GetPlaylistName(query, int.Parse(Current.Text));
+                PL_likes.Text = item.GetLikes(query, int.Parse(Current.Text)).ToString();
             }
             else if (int.Parse(Request.QueryString["playlist"].ToString()) > 0 && int.Parse(Request.QueryString["playlist"].ToString()) < 100)
             {
@@ -44,6 +49,7 @@ namespace Yoav
                 localhost.Links item = new localhost.Links();
                 int num = item.GetPlaylistNumber(Session["user"].ToString());
                 PL_name.Text = item.GetPlaylistName(query, int.Parse(Current.Text));
+                PL_likes.Text = item.GetLikes(query, int.Parse(Current.Text)).ToString();
             }
             else
             {
@@ -53,9 +59,9 @@ namespace Yoav
             {
                 if (Session["user"].ToString() == Request.QueryString["Username"].ToString() || Session["Admin"] == "true")
                 {
-                    ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-                    localhost.Links item = new localhost.Links();
+
                     Copy_playlist.Visible = false;
+                    Like.Visible = false;
                     Add_link.Visible = true;
                     User_update.Visible = true;
                     YoutubeLink.Visible = true;
@@ -63,10 +69,11 @@ namespace Yoav
                     Edit_Delete.Visible = true;
                     Add_playlist.Visible = true;
                     Delete_playlist.Visible = true;
-                    PL_name.Text = item.GetPlaylistName(query, int.Parse(Current.Text));
+
                     if (Session["Admin"] == "true")
                     {
                         Copy_playlist.Visible = true;
+                        Like.Visible = true;
                     }
                 }
             }
@@ -227,10 +234,10 @@ namespace Yoav
                 con1.Close();
             }
             con2.Close();
-            string name = item.GetPlaylistName(Request.QueryString["Username"], num);
+            string name = item.GetPlaylistName(Request.QueryString["Username"], int.Parse(Current.Text));
             item.AddPlaylist(Session["user"].ToString(), name);
         }
-        /*protected void Delete_PL(object sender, EventArgs e)
+        protected void Delete_PL(object sender, EventArgs e)
         {
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             localhost.Links item = new localhost.Links();
@@ -243,9 +250,51 @@ namespace Yoav
             conSer2.Parameters.AddWithValue("@num", Current.Text);
             OleDbDataReader Drdr2 = conSer2.ExecuteReader();
             con2.Close();
+            //--------------------------
+            OleDbConnection con4 = new OleDbConnection();
+            con4.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+            con4.Open();
+            string sqlstring4 = @"SELECT List_number FROM links_tbl WHERE Username = @usr";
+            OleDbCommand conSer4 = new OleDbCommand(sqlstring4, con4);
+            conSer4.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+            OleDbDataReader Drdr4 = conSer4.ExecuteReader();
+            DataTable dt = new DataTable("temp");
+            dt.Load(Drdr4);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (int.Parse(dr["List_number"].ToString()) > int.Parse(Current.Text))
+                {
+                    OleDbConnection con3 = new OleDbConnection();
+                    con3.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
+                    con3.Open();
+                    string sqlstring3 = @"UPDATE links_tbl SET List_number = @num WHERE Username = @usr AND List_number = @num2";
+                    using (OleDbCommand conSer3 = new OleDbCommand(sqlstring3, con3))
+                    {
+                        conSer3.Parameters.AddWithValue("@num", (int.Parse(dr["List_number"].ToString()) - 1).ToString());
+                        conSer3.Parameters.AddWithValue("@usr", Request.QueryString["Username"]);
+                        conSer3.Parameters.AddWithValue("@num", dr["List_number"].ToString());
+                        int Check = 0;
+                        Check = conSer3.ExecuteNonQuery();
+
+                    }
+                    con3.Close();
+                }
+            }
+            con4.Close();
+            item.DeletePlaylist(Request.QueryString["Username"], int.Parse(Current.Text));
+            Response.Redirect("UserProfile?Username=" + query);
 
 
-        }*/
+        }
+        protected void Like_PL(object sender, EventArgs e)
+        {
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            localhost.Links item = new localhost.Links();
+            item.AddLike(Request.QueryString["Username"], int.Parse(Current.Text));
+            Label3.Text = "you have liked this playlist!";
+            PL_likes.Text = item.GetLikes(Request.QueryString["Username"], int.Parse(Current.Text)).ToString();
+        }
         protected void Load_Images()
         {
             OleDbConnection con2 = new OleDbConnection();

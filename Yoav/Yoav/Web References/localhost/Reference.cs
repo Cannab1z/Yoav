@@ -20,6 +20,7 @@ namespace Yoav.localhost {
     using System.Web.Services.Protocols;
     using System.Xml.Serialization;
     using System.ComponentModel;
+    using System.Data;
     
     
     /// <remarks/>
@@ -38,6 +39,14 @@ namespace Yoav.localhost {
         private System.Threading.SendOrPostCallback GetPlaylistNameOperationCompleted;
         
         private System.Threading.SendOrPostCallback AddPlaylistOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback DeletePlaylistOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback AddLikeOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetLikesOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback MostLikesOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -91,6 +100,18 @@ namespace Yoav.localhost {
         
         /// <remarks/>
         public event AddPlaylistCompletedEventHandler AddPlaylistCompleted;
+        
+        /// <remarks/>
+        public event DeletePlaylistCompletedEventHandler DeletePlaylistCompleted;
+        
+        /// <remarks/>
+        public event AddLikeCompletedEventHandler AddLikeCompleted;
+        
+        /// <remarks/>
+        public event GetLikesCompletedEventHandler GetLikesCompleted;
+        
+        /// <remarks/>
+        public event MostLikesCompletedEventHandler MostLikesCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -239,6 +260,124 @@ namespace Yoav.localhost {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeletePlaylist", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void DeletePlaylist(string username, int num) {
+            this.Invoke("DeletePlaylist", new object[] {
+                        username,
+                        num});
+        }
+        
+        /// <remarks/>
+        public void DeletePlaylistAsync(string username, int num) {
+            this.DeletePlaylistAsync(username, num, null);
+        }
+        
+        /// <remarks/>
+        public void DeletePlaylistAsync(string username, int num, object userState) {
+            if ((this.DeletePlaylistOperationCompleted == null)) {
+                this.DeletePlaylistOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeletePlaylistOperationCompleted);
+            }
+            this.InvokeAsync("DeletePlaylist", new object[] {
+                        username,
+                        num}, this.DeletePlaylistOperationCompleted, userState);
+        }
+        
+        private void OnDeletePlaylistOperationCompleted(object arg) {
+            if ((this.DeletePlaylistCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.DeletePlaylistCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/AddLike", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void AddLike(string username, int num) {
+            this.Invoke("AddLike", new object[] {
+                        username,
+                        num});
+        }
+        
+        /// <remarks/>
+        public void AddLikeAsync(string username, int num) {
+            this.AddLikeAsync(username, num, null);
+        }
+        
+        /// <remarks/>
+        public void AddLikeAsync(string username, int num, object userState) {
+            if ((this.AddLikeOperationCompleted == null)) {
+                this.AddLikeOperationCompleted = new System.Threading.SendOrPostCallback(this.OnAddLikeOperationCompleted);
+            }
+            this.InvokeAsync("AddLike", new object[] {
+                        username,
+                        num}, this.AddLikeOperationCompleted, userState);
+        }
+        
+        private void OnAddLikeOperationCompleted(object arg) {
+            if ((this.AddLikeCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.AddLikeCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLikes", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public int GetLikes(string username, int num) {
+            object[] results = this.Invoke("GetLikes", new object[] {
+                        username,
+                        num});
+            return ((int)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetLikesAsync(string username, int num) {
+            this.GetLikesAsync(username, num, null);
+        }
+        
+        /// <remarks/>
+        public void GetLikesAsync(string username, int num, object userState) {
+            if ((this.GetLikesOperationCompleted == null)) {
+                this.GetLikesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLikesOperationCompleted);
+            }
+            this.InvokeAsync("GetLikes", new object[] {
+                        username,
+                        num}, this.GetLikesOperationCompleted, userState);
+        }
+        
+        private void OnGetLikesOperationCompleted(object arg) {
+            if ((this.GetLikesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetLikesCompleted(this, new GetLikesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/MostLikes", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Data.DataTable MostLikes() {
+            object[] results = this.Invoke("MostLikes", new object[0]);
+            return ((System.Data.DataTable)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void MostLikesAsync() {
+            this.MostLikesAsync(null);
+        }
+        
+        /// <remarks/>
+        public void MostLikesAsync(object userState) {
+            if ((this.MostLikesOperationCompleted == null)) {
+                this.MostLikesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnMostLikesOperationCompleted);
+            }
+            this.InvokeAsync("MostLikes", new object[0], this.MostLikesOperationCompleted, userState);
+        }
+        
+        private void OnMostLikesOperationCompleted(object arg) {
+            if ((this.MostLikesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.MostLikesCompleted(this, new MostLikesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -364,6 +503,66 @@ namespace Yoav.localhost {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void AddPlaylistCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void DeletePlaylistCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void AddLikeCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void GetLikesCompletedEventHandler(object sender, GetLikesCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetLikesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetLikesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public int Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void MostLikesCompletedEventHandler(object sender, MostLikesCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class MostLikesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal MostLikesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public System.Data.DataTable Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((System.Data.DataTable)(this.results[0]));
+            }
+        }
+    }
 }
 
 #pragma warning restore 1591

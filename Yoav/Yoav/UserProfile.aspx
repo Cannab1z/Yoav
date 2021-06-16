@@ -67,10 +67,17 @@
     <br />
     <asp:Label ID="Label2" runat="server" Text="Playlist name: "></asp:Label><asp:Label ID="PL_name" runat="server" Text=""></asp:Label>
     <br />
+    <asp:Label ID="Label4" runat="server" Text="Playlist likes: "></asp:Label><asp:Label ID="PL_likes" runat="server" Text=""></asp:Label>
+    <br />
     <asp:Button ID="Copy_playlist" runat="server" OnClick="Copy_PL" Visible="true" Text="Add This Playlist To Your Profile" CssClass="btn btn-default"/>
     <br />
-    <!--<asp:Button ID="Delete_playlist" runat="server" OnClick="Delete_PL" Visible="false" Text="Delete This Playlist" CssClass="btn btn-danger"/>-->
     <br />
+    <asp:Button ID="Delete_playlist" runat="server" OnClick="Delete_PL" Visible="false" Text="Delete This Playlist" CssClass="btn btn-danger"/>
+    <asp:Button ID="Like" runat="server" OnClick="Like_PL" Visible="true" Text="Like This Playlst" CssClass="btn btn-success"/><asp:Label ID="Label3" runat="server" Text=""></asp:Label>
+    <br />
+    <br />
+    <br />
+
     <asp:DataList ID="Playlist_lists" OnItemCommand="Playlist_ItemCommand" runat="server" RepeatDirection="Horizontal">
         <ItemTemplate>
             <asp:Button ID="number" Text='<%#DataBinder.Eval(Container.DataItem,"number" )%>' runat="server" CommandName="Click" CssClass="btn btn-default" />

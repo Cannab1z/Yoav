@@ -66,6 +66,60 @@
       <s:element name="AddPlaylistResponse">
         <s:complexType />
       </s:element>
+      <s:element name="DeletePlaylist">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeletePlaylistResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="AddLike">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddLikeResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetLikes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLikesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetLikesResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MostLikes">
+        <s:complexType />
+      </s:element>
+      <s:element name="MostLikesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MostLikesResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -98,6 +152,30 @@
   <wsdl:message name="AddPlaylistSoapOut">
     <wsdl:part name="parameters" element="tns:AddPlaylistResponse" />
   </wsdl:message>
+  <wsdl:message name="DeletePlaylistSoapIn">
+    <wsdl:part name="parameters" element="tns:DeletePlaylist" />
+  </wsdl:message>
+  <wsdl:message name="DeletePlaylistSoapOut">
+    <wsdl:part name="parameters" element="tns:DeletePlaylistResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddLikeSoapIn">
+    <wsdl:part name="parameters" element="tns:AddLike" />
+  </wsdl:message>
+  <wsdl:message name="AddLikeSoapOut">
+    <wsdl:part name="parameters" element="tns:AddLikeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLikesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLikes" />
+  </wsdl:message>
+  <wsdl:message name="GetLikesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLikesResponse" />
+  </wsdl:message>
+  <wsdl:message name="MostLikesSoapIn">
+    <wsdl:part name="parameters" element="tns:MostLikes" />
+  </wsdl:message>
+  <wsdl:message name="MostLikesSoapOut">
+    <wsdl:part name="parameters" element="tns:MostLikesResponse" />
+  </wsdl:message>
   <wsdl:portType name="LinksSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -118,6 +196,22 @@
     <wsdl:operation name="AddPlaylist">
       <wsdl:input message="tns:AddPlaylistSoapIn" />
       <wsdl:output message="tns:AddPlaylistSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePlaylist">
+      <wsdl:input message="tns:DeletePlaylistSoapIn" />
+      <wsdl:output message="tns:DeletePlaylistSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddLike">
+      <wsdl:input message="tns:AddLikeSoapIn" />
+      <wsdl:output message="tns:AddLikeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLikes">
+      <wsdl:input message="tns:GetLikesSoapIn" />
+      <wsdl:output message="tns:GetLikesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MostLikes">
+      <wsdl:input message="tns:MostLikesSoapIn" />
+      <wsdl:output message="tns:MostLikesSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="LinksSoap" type="tns:LinksSoap">
@@ -167,6 +261,42 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="DeletePlaylist">
+      <soap:operation soapAction="http://tempuri.org/DeletePlaylist" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddLike">
+      <soap:operation soapAction="http://tempuri.org/AddLike" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLikes">
+      <soap:operation soapAction="http://tempuri.org/GetLikes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MostLikes">
+      <soap:operation soapAction="http://tempuri.org/MostLikes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="LinksSoap12" type="tns:LinksSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -208,6 +338,42 @@
     </wsdl:operation>
     <wsdl:operation name="AddPlaylist">
       <soap12:operation soapAction="http://tempuri.org/AddPlaylist" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePlaylist">
+      <soap12:operation soapAction="http://tempuri.org/DeletePlaylist" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddLike">
+      <soap12:operation soapAction="http://tempuri.org/AddLike" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLikes">
+      <soap12:operation soapAction="http://tempuri.org/GetLikes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MostLikes">
+      <soap12:operation soapAction="http://tempuri.org/MostLikes" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

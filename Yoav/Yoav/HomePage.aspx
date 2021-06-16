@@ -7,18 +7,23 @@
         <asp:TextBox runat="server" TextMode="Search" placeholder="Search for Profiles" CssClass="form-control" ID="Search"></asp:TextBox>
         <asp:LinkButton CssClass="btn btn-primary" Text="Search"  runat="server" ID="Search_btn" OnClick="Search_click"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></asp:LinkButton>
         </div>
-        
     </div>
+
     <div class="row">
-          <div class="col-md-8">
-            <div class="thumbnail">
-              <asp:Image ImageUrl="~/homepage_img.png" runat="server" ID="Image1" />
-              <div class="caption">
-                <h3>IdanKid's Profile</h3>
-                <p>Here is one example of rearranging the videos to make one big image</p>
-                <p><asp:LinkButton runat="server" ID="idankid" OnClick="Profile_click" Text="Go to Idankid's Profile" CssClass="btn btn-default"></asp:LinkButton></p>
+    <asp:DataList ID="DataListLikes" runat="server" CssClass="table-hover table-responsive table" RepeatDirection="Horizontal" OnItemCommand="DataListLikes_ItemCommand">
+        <ItemTemplate>
+               <div class="panel panel-info">
+                   <div class="panel-body">
+                       <h3><asp:Label ID="User" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Username" )%>'></asp:Label></h3>
+                   </div>
+                    <div class="panel-footer">
+                        <p>Playlist's Name: <asp:Label ID="PL_name" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Playlist_name" )%>'></asp:Label></p>
+                        <p>Playlist Number: <asp:Label ID="Label1" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Playlist_number" )%>'></asp:Label></p>
+                        <p>Playlist Likes: <asp:Label ID="PL_likes" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Likes" )%>'></asp:Label></p>
+                        <p><asp:LinkButton runat="server" ID="profile" CommandName="Profile" Text="Go to Profile" CssClass="btn btn-info"></asp:LinkButton></p>
+                    </div>
               </div>
-            </div>
-          </div>
+        </ItemTemplate>
+    </asp:DataList>
         </div>
 </asp:Content>
