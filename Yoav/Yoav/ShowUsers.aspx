@@ -14,7 +14,7 @@
         <ItemTemplate>
                     <td><asp:Label ID="First" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"FirstName" )%>'></asp:Label></td>
                     <td><asp:Label ID="Last" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"LastName" )%>'></asp:Label></td>
-                    <td><asp:Label ID="Username" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Username" )%>'></asp:Label></td>
+                    <td><asp:Button ID="Username" CommandName="Profile" CssClass="btn btn-primary" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Username" )%>'></asp:Button></td>
                     <td><asp:Label ID="Email" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Email" )%>'></asp:Label></td>
                     <td><asp:Label ID="user_pass" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"user_Password" )%>'></asp:Label></td>
                     <td><asp:Label ID="birth" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"Birthdate" )%>'></asp:Label></td>

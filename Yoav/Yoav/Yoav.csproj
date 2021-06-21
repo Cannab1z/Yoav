@@ -113,6 +113,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Edit_playlists.aspx" />
     <Content Include="Errorpage.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -308,6 +309,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Edit_playlists.aspx.cs">
+      <DependentUpon>Edit_playlists.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Edit_playlists.aspx.designer.cs">
+      <DependentUpon>Edit_playlists.aspx</DependentUpon>
     </Compile>
     <Compile Include="Errorpage.aspx.cs">
       <DependentUpon>Errorpage.aspx</DependentUpon>

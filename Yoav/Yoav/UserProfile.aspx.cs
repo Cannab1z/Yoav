@@ -47,7 +47,6 @@ namespace Yoav
                 Current.Text = Request.QueryString["playlist"].ToString();
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 localhost.Links item = new localhost.Links();
-                int num = item.GetPlaylistNumber(Session["user"].ToString());
                 PL_name.Text = item.GetPlaylistName(query, int.Parse(Current.Text));
                 PL_likes.Text = item.GetLikes(query, int.Parse(Current.Text)).ToString();
             }
@@ -57,6 +56,7 @@ namespace Yoav
             }
             if (Session["user"] != null)
             {
+                Copy_playlist.Visible = true;
                 if (Session["user"].ToString() == Request.QueryString["Username"].ToString() || Session["Admin"] == "true")
                 {
 
@@ -69,11 +69,19 @@ namespace Yoav
                     Edit_Delete.Visible = true;
                     Add_playlist.Visible = true;
                     Delete_playlist.Visible = true;
+                    Edit_PL.Visible = true;
 
                     if (Session["Admin"] == "true")
                     {
                         Copy_playlist.Visible = true;
                         Like.Visible = true;
+                        Add_playlist.Visible = false;
+                        if (Session["user"].ToString() == Request.QueryString["Username"].ToString())
+                        {
+                            Copy_playlist.Visible = false;
+                            Like.Visible = false;
+                            Add_playlist.Visible = true;
+                        }
                     }
                 }
             }
@@ -236,6 +244,10 @@ namespace Yoav
             con2.Close();
             string name = item.GetPlaylistName(Request.QueryString["Username"], int.Parse(Current.Text));
             item.AddPlaylist(Session["user"].ToString(), name);
+        }
+        protected void Edit_Playlists(object sender, EventArgs e)
+        {
+            Response.Redirect("Edit_playlists?Username=" + Request.QueryString["Username"]);
         }
         protected void Delete_PL(object sender, EventArgs e)
         {

@@ -87,6 +87,15 @@ namespace Yoav
         protected global::System.Web.UI.WebControls.Button Add_playlist;
 
         /// <summary>
+        /// Edit_PL control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Edit_PL;
+
+        /// <summary>
         /// Label1 control.
         /// </summary>
         /// <remarks>

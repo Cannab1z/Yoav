@@ -120,6 +120,39 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetDB">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDBResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDBResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Update_Name">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="new_name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Update_NameResponse">
+        <s:complexType />
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -176,6 +209,18 @@
   <wsdl:message name="MostLikesSoapOut">
     <wsdl:part name="parameters" element="tns:MostLikesResponse" />
   </wsdl:message>
+  <wsdl:message name="GetDBSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDB" />
+  </wsdl:message>
+  <wsdl:message name="GetDBSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDBResponse" />
+  </wsdl:message>
+  <wsdl:message name="Update_NameSoapIn">
+    <wsdl:part name="parameters" element="tns:Update_Name" />
+  </wsdl:message>
+  <wsdl:message name="Update_NameSoapOut">
+    <wsdl:part name="parameters" element="tns:Update_NameResponse" />
+  </wsdl:message>
   <wsdl:portType name="LinksSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -212,6 +257,14 @@
     <wsdl:operation name="MostLikes">
       <wsdl:input message="tns:MostLikesSoapIn" />
       <wsdl:output message="tns:MostLikesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDB">
+      <wsdl:input message="tns:GetDBSoapIn" />
+      <wsdl:output message="tns:GetDBSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Update_Name">
+      <wsdl:input message="tns:Update_NameSoapIn" />
+      <wsdl:output message="tns:Update_NameSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="LinksSoap" type="tns:LinksSoap">
@@ -297,6 +350,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetDB">
+      <soap:operation soapAction="http://tempuri.org/GetDB" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Update_Name">
+      <soap:operation soapAction="http://tempuri.org/Update_Name" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="LinksSoap12" type="tns:LinksSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -374,6 +445,24 @@
     </wsdl:operation>
     <wsdl:operation name="MostLikes">
       <soap12:operation soapAction="http://tempuri.org/MostLikes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDB">
+      <soap12:operation soapAction="http://tempuri.org/GetDB" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Update_Name">
+      <soap12:operation soapAction="http://tempuri.org/Update_Name" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

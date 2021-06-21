@@ -48,6 +48,10 @@ namespace Yoav.localhost {
         
         private System.Threading.SendOrPostCallback MostLikesOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetDBOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback Update_NameOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -112,6 +116,12 @@ namespace Yoav.localhost {
         
         /// <remarks/>
         public event MostLikesCompletedEventHandler MostLikesCompleted;
+        
+        /// <remarks/>
+        public event GetDBCompletedEventHandler GetDBCompleted;
+        
+        /// <remarks/>
+        public event Update_NameCompletedEventHandler Update_NameCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -378,6 +388,67 @@ namespace Yoav.localhost {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetDB", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Data.DataTable GetDB(string username) {
+            object[] results = this.Invoke("GetDB", new object[] {
+                        username});
+            return ((System.Data.DataTable)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetDBAsync(string username) {
+            this.GetDBAsync(username, null);
+        }
+        
+        /// <remarks/>
+        public void GetDBAsync(string username, object userState) {
+            if ((this.GetDBOperationCompleted == null)) {
+                this.GetDBOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetDBOperationCompleted);
+            }
+            this.InvokeAsync("GetDB", new object[] {
+                        username}, this.GetDBOperationCompleted, userState);
+        }
+        
+        private void OnGetDBOperationCompleted(object arg) {
+            if ((this.GetDBCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetDBCompleted(this, new GetDBCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/Update_Name", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void Update_Name(string username, int num, string new_name) {
+            this.Invoke("Update_Name", new object[] {
+                        username,
+                        num,
+                        new_name});
+        }
+        
+        /// <remarks/>
+        public void Update_NameAsync(string username, int num, string new_name) {
+            this.Update_NameAsync(username, num, new_name, null);
+        }
+        
+        /// <remarks/>
+        public void Update_NameAsync(string username, int num, string new_name, object userState) {
+            if ((this.Update_NameOperationCompleted == null)) {
+                this.Update_NameOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdate_NameOperationCompleted);
+            }
+            this.InvokeAsync("Update_Name", new object[] {
+                        username,
+                        num,
+                        new_name}, this.Update_NameOperationCompleted, userState);
+        }
+        
+        private void OnUpdate_NameOperationCompleted(object arg) {
+            if ((this.Update_NameCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.Update_NameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -563,6 +634,36 @@ namespace Yoav.localhost {
             }
         }
     }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void GetDBCompletedEventHandler(object sender, GetDBCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetDBCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetDBCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public System.Data.DataTable Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((System.Data.DataTable)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void Update_NameCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591

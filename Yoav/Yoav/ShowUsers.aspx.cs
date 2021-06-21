@@ -39,7 +39,7 @@ namespace Yoav
             if (e.CommandName == "Delete_command")
             {
                 DataListUsers.SelectedIndex = e.Item.ItemIndex;
-                Label_help.Text = ((Label)DataListUsers.SelectedItem.FindControl("Username")).Text;
+                Label_help.Text = ((Button)DataListUsers.SelectedItem.FindControl("Username")).Text;
                 OleDbConnection con1 = new OleDbConnection();
                 con1.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + Request.PhysicalApplicationPath + "\\Yoav_DB.accdb";
                 con1.Open();
@@ -53,11 +53,17 @@ namespace Yoav
             else if (e.CommandName == "Update_command")
             {
                 DataListUsers.SelectedIndex = e.Item.ItemIndex;
-                Label_help.Text = ((Label)DataListUsers.SelectedItem.FindControl("Username")).Text;
+                Label_help.Text = ((Button)DataListUsers.SelectedItem.FindControl("Username")).Text;
                 Response.Redirect(String.Format("UpdateUser.aspx?Username={0}", Label_help.Text));
             }
-            
-            
+            else if (e.CommandName == "Profile")
+            {
+                DataListUsers.SelectedIndex = e.Item.ItemIndex;
+                Label_help.Text = ((Button)DataListUsers.SelectedItem.FindControl("Username")).Text;
+                Response.Redirect(String.Format("UserProfile.aspx?Username={0}", Label_help.Text));
+            }
+
+
         }
 
     }

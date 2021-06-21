@@ -63,13 +63,15 @@
         <tr><td><asp:Button ID="Add_playlist" runat="server" Text="Add Playlist" OnClick="Add_playlist_click" Visible="false" CssClass="btn btn-default"/><td>
     </table>
     <br />
+    <asp:Button ID="Edit_PL" runat="server" Text="Edit Playlist" OnClick="Edit_Playlists" Visible="false" CssClass="btn btn-default"/>
+    <br />
     <asp:Label ID="Label1" runat="server" Text="Currently viewing playlist number: "></asp:Label><asp:Label ID="Current" runat="server" Text="1"></asp:Label>
     <br />
     <asp:Label ID="Label2" runat="server" Text="Playlist name: "></asp:Label><asp:Label ID="PL_name" runat="server" Text=""></asp:Label>
     <br />
     <asp:Label ID="Label4" runat="server" Text="Playlist likes: "></asp:Label><asp:Label ID="PL_likes" runat="server" Text=""></asp:Label>
     <br />
-    <asp:Button ID="Copy_playlist" runat="server" OnClick="Copy_PL" Visible="true" Text="Add This Playlist To Your Profile" CssClass="btn btn-default"/>
+    <asp:Button ID="Copy_playlist" runat="server" OnClick="Copy_PL" Visible="false" Text="Add This Playlist To Your Profile" CssClass="btn btn-default"/>
     <br />
     <br />
     <asp:Button ID="Delete_playlist" runat="server" OnClick="Delete_PL" Visible="false" Text="Delete This Playlist" CssClass="btn btn-danger"/>

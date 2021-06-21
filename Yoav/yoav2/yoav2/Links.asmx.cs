@@ -182,5 +182,38 @@ namespace yoav2
             con2.Close();
             return dt;
         }
+        [WebMethod]
+        public DataTable GetDB(string username)
+        {
+            DataTable dt = new DataTable("likes");
+            OleDbConnection con2 = new OleDbConnection();
+            con2.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\playlist.accdb";
+            con2.Open();
+            string sqlstring2 = @"SELECT * FROM Playlists WHERE Username = @usr Order BY Playlist_number ASC";
+            OleDbCommand conSer2 = new OleDbCommand(sqlstring2, con2);
+            conSer2.Parameters.AddWithValue("@usr", username);
+            OleDbDataReader Drdr2 = conSer2.ExecuteReader();
+            dt.Load(Drdr2);
+            con2.Close();
+            return dt;
+        }
+        [WebMethod]
+        public void Update_Name(string username, int num, string new_name)
+        {
+            OleDbConnection con3 = new OleDbConnection();
+            con3.ConnectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + HttpContext.Current.Request.PhysicalApplicationPath + "\\playlist.accdb";
+            con3.Open();
+            string sqlstring3 = @"UPDATE Playlists SET Playlist_name = @name WHERE Username = @usr AND Playlist_number = @num2";
+            using (OleDbCommand conSer3 = new OleDbCommand(sqlstring3, con3))
+            {
+                conSer3.Parameters.AddWithValue("@name", new_name);
+                conSer3.Parameters.AddWithValue("@usr", username);
+                conSer3.Parameters.AddWithValue("@num2", num);
+                int Check = 0;
+                Check = conSer3.ExecuteNonQuery();
+
+            }
+            con3.Close();
+        }
     }
 }

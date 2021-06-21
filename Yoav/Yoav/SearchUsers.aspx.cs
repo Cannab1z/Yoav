@@ -42,5 +42,6 @@ namespace Yoav
             LinkButton hey = (LinkButton)sender;
             Response.Redirect("UserProfile?Username=" + hey.Text);
         }
+
     }
 }
